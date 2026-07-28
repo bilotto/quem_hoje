@@ -130,4 +130,10 @@ function init() {
   document.getElementById("resetAll").addEventListener("click", resetAll);
 }
 
-document.addEventListener("DOMContentLoaded", init);
+// Run now if the DOM is already parsed (scripts are loaded dynamically),
+// otherwise wait for it.
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", init);
+} else {
+  init();
+}

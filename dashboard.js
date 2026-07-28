@@ -158,11 +158,36 @@ function renderPendings() {
   `;
 }
 
-function init() {
+// Re-render the date-dependent parts. Favorites/pendings don't change daily.
+function renderAll() {
   renderToday();
   renderDashboard();
   renderFavorites();
   renderPendings();
 }
 
-document.addEventListener("DOMContentLoaded", init);
+// Keep the counters fresh: if the calendar day changes while the tab is
+// open, recompute everything automatically (checked once per minute).
+function watchDayChange() {
+  let currentDay = new Date().toDateString();
+  setInterval(() => {
+    const today = new Date().toDateString();
+    if (today !== currentDay) {
+      currentDay = today;
+      renderAll();
+    }
+  }, 60 * 1000);
+}
+
+function init() {
+  renderAll();
+  watchDayChange();
+}
+
+// Run now if the DOM is already parsed (scripts are loaded dynamically),
+// otherwise wait for it.
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", init);
+} else {
+  init();
+}

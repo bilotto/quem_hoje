@@ -3,11 +3,24 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
   <title>Sorteio · Quem Hoje? 🎲</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css" />
+  <script>
+    // Cache-buster: GitHub Pages caches assets, so we load CSS/JS with a
+    // changing version query to make sure the latest code always wins.
+    window.__ASSET_VERSION__ = Date.now();
+    (function () {
+      var css = document.createElement("link");
+      css.rel = "stylesheet";
+      css.href = "style.css?v=" + window.__ASSET_VERSION__;
+      document.head.appendChild(css);
+    })();
+  </script>
 </head>
 <body>
   <div class="bg-blobs" aria-hidden="true">
@@ -42,7 +55,19 @@
 
   <div class="confetti" id="confetti" aria-hidden="true"></div>
 
-  <script src="config.js"></script>
-  <script src="app.js"></script>
+  <script>
+    // Load scripts in order (config first) with the same cache-buster.
+    (function () {
+      var v = window.__ASSET_VERSION__;
+      var scripts = ["config.js", "app.js"];
+      (function load(i) {
+        if (i >= scripts.length) return;
+        var s = document.createElement("script");
+        s.src = scripts[i] + "?v=" + v;
+        s.onload = function () { load(i + 1); };
+        document.body.appendChild(s);
+      })(0);
+    })();
+  </script>
 </body>
 </html>
