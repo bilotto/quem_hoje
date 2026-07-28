@@ -1,118 +1,42 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quem Hoje?</title>
-    <style>
-        body {
-            background-color: #0d1117; /* GitHub Dark Mode bg */
-            color: #c9d1d9;
-            font-family: 'Courier New', Courier, monospace;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            margin: 0;
-        }
-        #terminal {
-            background: #161b22;
-            border: 1px solid #30363d;
-            border-radius: 6px;
-            padding: 30px;
-            width: 320px;
-            text-align: center;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.8);
-        }
-        h2 {
-            margin-top: 0;
-            font-size: 18px;
-            color: #8b949e;
-            font-weight: normal;
-        }
-        button {
-            background-color: #238636;
-            color: #ffffff;
-            border: 1px solid rgba(240, 246, 252, 0.1);
-            padding: 10px 20px;
-            font-size: 16px;
-            font-family: 'Courier New', Courier, monospace;
-            font-weight: bold;
-            border-radius: 6px;
-            cursor: pointer;
-            margin-top: 25px;
-            transition: background-color 0.2s;
-        }
-        button:hover {
-            background-color: #2ea043;
-        }
-        button:disabled {
-            background-color: #21262d;
-            color: #8b949e;
-            cursor: not-allowed;
-            border-color: #30363d;
-        }
-        #result {
-            font-size: 28px;
-            font-weight: bold;
-            color: #58a6ff;
-            margin-top: 20px;
-            min-height: 35px;
-            letter-spacing: 2px;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quem Hoje? 🎲</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+  <div class="bg-blobs" aria-hidden="true">
+    <span class="blob b1"></span>
+    <span class="blob b2"></span>
+    <span class="blob b3"></span>
+  </div>
 
-    <div id="terminal">
-        <h2>> ./query_quem_hoje.sh</h2>
-        <div id="result">AGUARDANDO...</div>
-        <button id="btn-exec" onclick="executarSorteio()">[ EXECUTAR ]</button>
-    </div>
+  <main class="app">
+    <header class="header">
+      <h1 class="title">Quem <span class="accent">Hoje?</span> 🎲</h1>
+      <p class="subtitle">O sorteio mais justo do relacionamento™</p>
+      <div class="today" id="today"></div>
+    </header>
 
-    <script>
-        // Array com os alvos do sorteio
-        const targets = ['FÁBIO', 'CLEBER'];
+    <section class="controls">
+      <button class="btn btn-primary" id="drawAll">🎯 Sortear tudo</button>
+      <button class="btn btn-ghost" id="resetAll">↺ Limpar</button>
+    </section>
 
-        function executarSorteio() {
-            const resultDiv = document.getElementById('result');
-            const btn = document.getElementById('btn-exec');
-            
-            // Trava o botão durante a execução
-            btn.disabled = true;
-            btn.innerText = '[ PROCESSANDO ]';
+    <section class="grid" id="grid"></section>
 
-            let interacoes = 0;
-            const maxInteracoes = 25; // Define o tempo do suspense (25 * 100ms = 2.5s)
-            const intervalo = 100;
+    <footer class="footer">
+      <p>Feito com 💚 (e total imparcialidade) para o Fábio e o Cleber.</p>
+    </footer>
+  </main>
 
-            // Efeito visual de descriptografia/processamento
-            const animacao = setInterval(() => {
-                // Gera um hash aleatório curto para simular processamento
-                const fakeHash = Math.random().toString(36).substring(2, 8).toUpperCase();
-                resultDiv.innerText = `0x${fakeHash}`;
-                resultDiv.style.color = '#8b949e';
-                
-                interacoes++;
+  <div class="confetti" id="confetti" aria-hidden="true"></div>
 
-                if (interacoes >= maxInteracoes) {
-                    clearInterval(animacao);
-                    
-                    // Sorteio real usando pseudo-random
-                    const vencedor = targets[Math.floor(Math.random() * targets.length)];
-                    
-                    // Output final
-                    resultDiv.innerText = `> ${vencedor} <`;
-                    resultDiv.style.color = '#58a6ff'; // Retorna a cor de destaque
-                    
-                    // Libera o botão
-                    btn.disabled = false;
-                    btn.innerText = '[ RE-EXECUTAR ]';
-                }
-            }, intervalo);
-        }
-    </script>
-
+  <script src="app.js"></script>
 </body>
 </html>
