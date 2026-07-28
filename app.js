@@ -6,8 +6,8 @@ const PLAYERS = {
   fabio: { name: "Fábio", emoji: "🧑‍💻", cls: "fabio" },
 };
 
-// Fábio's real chance of being drawn: 1 in 10.
-const FABIO_CHANCE = 0.1;
+// Now a genuinely fair draw: 50/50 for each.
+const FABIO_CHANCE = 0.5;
 
 // The boxes to be raffled.
 const BOXES = [
@@ -21,7 +21,7 @@ const BOXES = [
 
 const SPIN_MS = 900;
 
-// Rigged coin: returns "fabio" ~10% of the time, "cleber" otherwise.
+// Fair coin: returns "fabio" 50% of the time, "cleber" otherwise.
 function drawPlayer() {
   return Math.random() < FABIO_CHANCE ? PLAYERS.fabio : PLAYERS.cleber;
 }
@@ -74,7 +74,7 @@ function spinBox(index) {
       const winner = drawPlayer();
       result.className = `result ${winner.cls}`;
       result.textContent = `${winner.emoji} ${winner.name}`;
-      if (winner.cls === "cleber") burstConfetti();
+      burstConfetti();
       resolve(winner);
     }, SPIN_MS);
   });
