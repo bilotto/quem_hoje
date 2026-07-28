@@ -18,7 +18,7 @@ window.CONFIG = {
   // Important dates. Use the format "YYYY-MM-DD".
   dates: {
     // When you started dating.
-    relationshipStart: "2026-06-20",
+    relationshipStart: "2026-05-20",
 
     // Your vacation together in November (adjust the exact day!).
     vacation: "2026-11-01",
