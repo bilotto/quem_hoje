@@ -42,6 +42,25 @@ window.CONFIG = {
     { emoji: "🐉", label: "Série favorita", value: "Game of Thrones" },
   ],
 
+  // Push notifications via ntfy.sh.
+  // 1) Install the "ntfy" app on your phone.
+  // 2) Subscribe to the SAME topic below (pick a hard-to-guess name!).
+  // 3) When Cleber taps a button, you get a push on your phone.
+  ntfy: {
+    server: "https://ntfy.sh",
+    topic: "clebinho_jr",
+    defaultTitle: "Recadinho do Cleber 💚",
+    // One-tap preset messages.
+    quickMessages: [
+      { emoji: "❤️", text: "Te amo!" },
+      { emoji: "🥺", text: "Tô com saudade..." },
+      { emoji: "🍽️", text: "Bora comer alguma coisa?" },
+      { emoji: "📞", text: "Me liga quando puder" },
+      { emoji: "🏠", text: "Chega logo em casa!" },
+      { emoji: "😏", text: "Tem surpresa te esperando 😏" },
+    ],
+  },
+
   // The raffle boxes.
   // Each box may have an optional `extra` that raffles a second detail
   // (a dish, a position, a genre...). Just edit the `options` lists.

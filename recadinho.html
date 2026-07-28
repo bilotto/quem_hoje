@@ -6,7 +6,7 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
   <meta http-equiv="Pragma" content="no-cache" />
   <meta http-equiv="Expires" content="0" />
-  <title>Sorteio · Quem Hoje? 🎲</title>
+  <title>Recadinho · Quem Hoje? 💌</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet" />
@@ -32,35 +32,27 @@
   <main class="app">
     <nav class="nav">
       <a href="index.html" class="nav-link">🏠 Dashboard</a>
-      <a href="sorteio.html" class="nav-link active">🎲 Sorteio</a>
-      <a href="recadinho.html" class="nav-link">💌 Recadinho</a>
+      <a href="sorteio.html" class="nav-link">🎲 Sorteio</a>
+      <a href="recadinho.html" class="nav-link active">💌 Recadinho</a>
     </nav>
 
     <header class="header">
-      <h1 class="title">Quem <span class="accent">Hoje?</span> 🎲</h1>
-      <p class="subtitle">✅ Sorteio 100% justo, 50/50 pra cada!</p>
-      <div class="today" id="today"></div>
+      <h1 class="title">Recadinho <span class="accent">pro Fabio</span> 💌</h1>
+      <p class="subtitle">Um toque e cai direto no celular dele</p>
     </header>
 
-    <section class="controls">
-      <button class="btn btn-primary" id="drawAll">🎯 Sortear tudo</button>
-      <button class="btn btn-ghost" id="resetAll">↺ Limpar</button>
-    </section>
-
-    <section class="grid" id="grid"></section>
+    <section class="notify-panel" id="notify"></section>
 
     <footer class="footer">
-      <p>Feito com 💚 (e total imparcialidade) para o Fabio e o Cleber.</p>
+      <p>Feito com 💚 para o Fabio e o Cleber.</p>
     </footer>
   </main>
-
-  <div class="confetti" id="confetti" aria-hidden="true"></div>
 
   <script>
     // Load scripts in order (config first) with the same cache-buster.
     (function () {
       var v = window.__ASSET_VERSION__;
-      var scripts = ["config.js", "app.js"];
+      var scripts = ["config.js", "notify.js"];
       (function load(i) {
         if (i >= scripts.length) return;
         var s = document.createElement("script");
