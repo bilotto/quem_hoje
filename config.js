@@ -1,0 +1,80 @@
+"use strict";
+
+/**
+ * Central configuration for the whole app.
+ * Edit everything here: players, odds, dashboard dates and the raffle boxes.
+ * Both the Dashboard and the Raffle pages read from this single object.
+ */
+window.CONFIG = {
+  // The two contestants.
+  players: {
+    cleber: { name: "Cleber", emoji: "😎", cls: "cleber" },
+    fabio: { name: "Fabio", emoji: "🧑‍💻", cls: "fabio" },
+  },
+
+  // Fabio's chance of being drawn (0 to 1). 0.5 = totally fair.
+  fabioChance: 0.5,
+
+  // Important dates. Use the format "YYYY-MM-DD".
+  dates: {
+    // When you started dating.
+    relationshipStart: "2026-06-20",
+
+    // Your vacation together in November (adjust the exact day!).
+    vacation: "2026-11-01",
+
+    // Cleber's weekend off: works 2 weekends, then 1 off (a 3-week cycle).
+    // `referenceSaturday` is any known Saturday he had off.
+    cleberFolga: {
+      referenceSaturday: "2026-07-25",
+      periodDays: 21,
+    },
+  },
+
+  // Open to-dos shown on the dashboard. Set `done: true` to check one off.
+  pendings: [
+    { who: "Fabio", text: "Confirmar as férias", done: false },
+  ],
+
+  // The couple's favorites. Add as many as you want.
+  favorites: [
+    { emoji: "🍛", label: "Comida favorita", value: "Baião de dois" },
+    { emoji: "🐉", label: "Série favorita", value: "Game of Thrones" },
+  ],
+
+  // The raffle boxes.
+  // Each box may have an optional `extra` that raffles a second detail
+  // (a dish, a position, a genre...). Just edit the `options` lists.
+  boxes: [
+    { emoji: "🍽️", question: "Quem vai lavar a louça hoje?" },
+    {
+      emoji: "😏",
+      question: "Quem vai *** hoje?",
+      extra: {
+        label: "Posição",
+        emoji: "🔥",
+        options: ["Papai-e-mamãe", "De ladinho", "Cachorrinho", "Sentado", "De pé", "Surpresa 😏"],
+      },
+    },
+    {
+      emoji: "🍳",
+      question: "Quem vai fazer o jantar hoje?",
+      extra: {
+        label: "Prato",
+        emoji: "🍝",
+        options: ["Macarrão", "Pizza", "Hambúrguer", "Strogonoff", "Sushi", "Risoto", "Comida japonesa"],
+      },
+    },
+    { emoji: "🗑️", question: "Quem vai levar o lixo hoje?" },
+    { emoji: "🛏️", question: "Quem vai arrumar a cama hoje?" },
+    {
+      emoji: "🍰",
+      question: "Quem vai fazer uma sobremesa hoje?",
+      extra: {
+        label: "Sobremesa",
+        emoji: "🧁",
+        options: ["Brigadeiro", "Pudim", "Mousse de chocolate", "Sorvete", "Bolo", "Petit gâteau"],
+      },
+    },
+  ],
+};

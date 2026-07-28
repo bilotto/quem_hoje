@@ -1,23 +1,9 @@
 "use strict";
 
-// Contestants. The draw is "totally fair" (wink).
-const PLAYERS = {
-  cleber: { name: "Cleber", emoji: "😎", cls: "cleber" },
-  fabio: { name: "Fábio", emoji: "🧑‍💻", cls: "fabio" },
-};
-
-// Now a genuinely fair draw: 50/50 for each.
-const FABIO_CHANCE = 0.5;
-
-// The boxes to be raffled.
-const BOXES = [
-  { emoji: "🍽️", question: "Quem vai lavar a louça hoje?" },
-  { emoji: "😏", question: "Quem vai *** hoje?" },
-  { emoji: "🍳", question: "Quem vai fazer o jantar hoje?" },
-  { emoji: "🗑️", question: "Quem vai levar o lixo hoje?" },
-  { emoji: "🛏️", question: "Quem vai arrumar a cama hoje?" },
-  { emoji: "🍰", question: "Quem vai fazer uma sobremesa hoje?" },
-];
+// All data comes from the central config (config.js).
+const PLAYERS = CONFIG.players;
+const FABIO_CHANCE = CONFIG.fabioChance;
+const BOXES = CONFIG.boxes;
 
 const SPIN_MS = 900;
 
@@ -40,10 +26,14 @@ function renderToday() {
 function buildBox(box, index) {
   const card = document.createElement("article");
   card.className = "box";
+  const extraHtml = box.extra
+    ? `<div class="result-extra" id="extra-${index}"></div>`
+    : "";
   card.innerHTML = `
     <div class="box-emoji">${box.emoji}</div>
     <h2 class="box-question">${box.question}</h2>
     <div class="result" id="result-${index}">🎲 quem será?</div>
+    ${extraHtml}
     <button class="btn-draw" data-index="${index}">Sortear</button>
   `;
   card
@@ -58,15 +48,25 @@ function renderBoxes() {
   BOXES.forEach((box, i) => grid.appendChild(buildBox(box, i)));
 }
 
-// Animate the result field then settle on the (rigged) winner.
+function pickRandom(list) {
+  return list[Math.floor(Math.random() * list.length)];
+}
+
+// Animate the result field then settle on the winner (and optional extra).
 function spinBox(index) {
   return new Promise((resolve) => {
+    const box = BOXES[index];
     const result = document.getElementById(`result-${index}`);
+    const extraEl = document.getElementById(`extra-${index}`);
     result.className = "result spinning";
+    if (extraEl) extraEl.textContent = "";
 
     const flick = setInterval(() => {
       const p = Math.random() < 0.5 ? PLAYERS.fabio : PLAYERS.cleber;
       result.textContent = `${p.emoji} ${p.name}`;
+      if (extraEl && box.extra) {
+        extraEl.textContent = `${box.extra.emoji} ${pickRandom(box.extra.options)}`;
+      }
     }, 90);
 
     setTimeout(() => {
@@ -74,6 +74,11 @@ function spinBox(index) {
       const winner = drawPlayer();
       result.className = `result ${winner.cls}`;
       result.textContent = `${winner.emoji} ${winner.name}`;
+      if (extraEl && box.extra) {
+        const detail = pickRandom(box.extra.options);
+        extraEl.className = "result-extra revealed";
+        extraEl.textContent = `${box.extra.emoji} ${box.extra.label}: ${detail}`;
+      }
       burstConfetti();
       resolve(winner);
     }, SPIN_MS);
@@ -92,6 +97,11 @@ function resetAll() {
     const result = document.getElementById(`result-${i}`);
     result.className = "result";
     result.textContent = "🎲 quem será?";
+    const extraEl = document.getElementById(`extra-${i}`);
+    if (extraEl) {
+      extraEl.className = "result-extra";
+      extraEl.textContent = "";
+    }
   });
 }
 

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sorteio · Quem Hoje? 🎲</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="bg-blobs" aria-hidden="true">
+    <span class="blob b1"></span>
+    <span class="blob b2"></span>
+    <span class="blob b3"></span>
+  </div>
+
+  <main class="app">
+    <nav class="nav">
+      <a href="index.html" class="nav-link">🏠 Dashboard</a>
+      <a href="sorteio.html" class="nav-link active">🎲 Sorteio</a>
+    </nav>
+
+    <header class="header">
+      <h1 class="title">Quem <span class="accent">Hoje?</span> 🎲</h1>
+      <p class="subtitle">✅ Sorteio 100% justo, 50/50 pra cada!</p>
+      <div class="today" id="today"></div>
+    </header>
+
+    <section class="controls">
+      <button class="btn btn-primary" id="drawAll">🎯 Sortear tudo</button>
+      <button class="btn btn-ghost" id="resetAll">↺ Limpar</button>
+    </section>
+
+    <section class="grid" id="grid"></section>
+
+    <footer class="footer">
+      <p>Feito com 💚 (e total imparcialidade) para o Fabio e o Cleber.</p>
+    </footer>
+  </main>
+
+  <div class="confetti" id="confetti" aria-hidden="true"></div>
+
+  <script src="config.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
