@@ -158,7 +158,6 @@ function renderPendings() {
   `;
 }
 
-// Re-render the date-dependent parts. Favorites/pendings don't change daily.
 function renderAll() {
   renderToday();
   renderDashboard();

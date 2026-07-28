@@ -40,7 +40,7 @@ async function handleSend(message, button) {
   }
   try {
     await sendNotification(message.trim());
-    showToast("Recadinho enviado! 💚", false);
+    showToast("Corvo enviado! 🐦‍⬛", false);
   } catch (err) {
     showToast(`Ops, não rolou: ${err.message}`, true);
   } finally {
@@ -64,13 +64,13 @@ function renderNotify() {
     .join("");
 
   panel.innerHTML = `
-    <div class="notify-hero">🧑‍💻💚😎</div>
-    <p class="notify-lead">Escolhe um recadinho ou escreve o seu:</p>
+    <div class="notify-hero">🐦‍⬛✉️</div>
+    <p class="notify-lead">Solta um corvo ou escreve a sua mensagem:</p>
     <div class="notify-quick">${buttons}</div>
-    <div class="notify-divider"><span>ou manda o seu</span></div>
+    <div class="notify-divider"><span>ou escreve o seu corvo</span></div>
     <div class="notify-custom">
       <input type="text" id="notify-input" placeholder="Escreve aqui..." maxlength="200" />
-      <button class="btn btn-primary" id="notify-send">Enviar 💌</button>
+      <button class="btn btn-primary" id="notify-send">Enviar corvo 🐦‍⬛</button>
     </div>
     <div class="notify-toast" id="notify-toast"></div>
   `;

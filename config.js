@@ -49,15 +49,18 @@ window.CONFIG = {
   ntfy: {
     server: "https://ntfy.sh",
     topic: "clebinho_jr",
-    defaultTitle: "Recadinho do Cleber 💚",
-    // One-tap preset messages.
+    defaultTitle: "Um corvo do Cleber 🐦‍⬛",
+    // One-tap preset messages ("corvos").
     quickMessages: [
       { emoji: "❤️", text: "Te amo!" },
       { emoji: "🥺", text: "Tô com saudade..." },
-      { emoji: "🍽️", text: "Bora comer alguma coisa?" },
+      { emoji: "😮‍💨", text: "Tô cansado" },
+      { emoji: "🧟", text: "Tô morto" },
+      { emoji: "🍔", text: "Tô com fome" },
       { emoji: "📞", text: "Me liga quando puder" },
       { emoji: "🏠", text: "Chega logo em casa!" },
       { emoji: "😏", text: "Tem surpresa te esperando 😏" },
+      { emoji: "🚿", text: "Faz a chuca 😏" },
     ],
   },
 
