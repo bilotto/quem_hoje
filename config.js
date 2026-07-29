@@ -76,6 +76,24 @@ window.CONFIG = {
     { emoji: "🐉", label: "Série favorita", value: "Game of Thrones" },
   ],
 
+  // Secret wheel (Roleta): it never shows the options. Each spin has a low
+  // chance to win the prize; otherwise it shows a "keep trying" message.
+  roulette: {
+    // Chance of winning on each spin (0 to 1). Low on purpose.
+    winChance: 0.05,
+    prize: "🍽️ Escolher qualquer restaurante em São Paulo pra eu te levar pra jantar hoje!",
+    winTitle: "VOCÊ GANHOU! 🎉",
+    // Shown when the spin doesn't win (picked at random).
+    tryAgain: [
+      "Quase! Tenta de novo 👀",
+      "Não foi dessa vez... 🌀",
+      "Roda mais uma!",
+      "Tá esquentando... 🔥",
+      "Continua tentando 😏",
+      "Hmm... de novo!",
+    ],
+  },
+
   // Push notifications via ntfy.sh.
   // 1) Install the "ntfy" app on your phone.
   // 2) Subscribe to the SAME topic below (pick a hard-to-guess name!).

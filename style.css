@@ -377,6 +377,159 @@ body {
   margin-bottom: 22px;
 }
 
+.roulette-panel {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+.roulette-stage {
+  position: relative;
+  display: inline-block;
+}
+#wheel {
+  display: block;
+  border-radius: 50%;
+  box-shadow: var(--shadow);
+}
+.roulette-pointer {
+  position: absolute;
+  top: -6px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 15px solid transparent;
+  border-right: 15px solid transparent;
+  border-top: 26px solid var(--accent);
+  filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.5));
+  z-index: 2;
+}
+.roulette-result {
+  font-family: "Fredoka", sans-serif;
+  font-size: 1.6rem;
+  font-weight: 700;
+  min-height: 2rem;
+  padding: 8px 22px;
+  border-radius: 999px;
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  transition: transform 0.2s ease;
+}
+.roulette-result.win {
+  color: #1a1030;
+  background: var(--accent);
+  transform: scale(1.08);
+  box-shadow: 0 0 28px rgba(255, 209, 102, 0.6);
+}
+.roulette-result.miss {
+  color: var(--muted);
+}
+.roulette-spins {
+  font-weight: 700;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+/* Win celebration */
+.party-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  overflow: hidden;
+  background: radial-gradient(circle at 50% 40%, rgba(123, 47, 247, 0.55), rgba(15, 10, 30, 0.92));
+  animation: party-fade 0.25s ease;
+}
+@keyframes party-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.party-rays {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 220vmax;
+  height: 220vmax;
+  transform: translate(-50%, -50%);
+  background: repeating-conic-gradient(
+    from 0deg,
+    rgba(255, 255, 255, 0.08) 0deg 8deg,
+    transparent 8deg 16deg
+  );
+  animation: party-spin 14s linear infinite;
+  pointer-events: none;
+}
+@keyframes party-spin {
+  to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+.party-emoji {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.party-emoji span {
+  position: absolute;
+  top: -40px;
+  animation: party-fall linear forwards;
+}
+@keyframes party-fall {
+  to { transform: translateY(110vh) rotate(360deg); opacity: 0.2; }
+}
+.party-card {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  max-width: 460px;
+  width: 100%;
+  padding: 34px 28px;
+  border-radius: 24px;
+  background: rgba(15, 10, 30, 0.75);
+  border: 2px solid var(--accent);
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(6px);
+  animation: party-pop 0.5s cubic-bezier(0.2, 1.4, 0.4, 1);
+}
+@keyframes party-pop {
+  0% { transform: scale(0.4) rotate(-8deg); opacity: 0; }
+  100% { transform: scale(1) rotate(0); opacity: 1; }
+}
+.party-trophy {
+  font-size: 4.6rem;
+  animation: party-bounce 1s ease-in-out infinite;
+}
+@keyframes party-bounce {
+  0%, 100% { transform: translateY(0) rotate(-4deg); }
+  50% { transform: translateY(-14px) rotate(4deg); }
+}
+.party-title {
+  font-family: "Fredoka", sans-serif;
+  font-size: 2.4rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  margin: 6px 0 12px;
+  background: linear-gradient(90deg, #ffd166, #ff6ec7, #4dd0ff, #8dff9e, #ffd166);
+  background-size: 300% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: party-rainbow 3s linear infinite;
+}
+@keyframes party-rainbow {
+  to { background-position: 300% 0; }
+}
+.party-prize {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.4;
+  margin-bottom: 22px;
+}
+
 .photo-panel {
   margin-bottom: 22px;
   text-align: center;

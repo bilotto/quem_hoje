@@ -6,7 +6,7 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
   <meta http-equiv="Pragma" content="no-cache" />
   <meta http-equiv="Expires" content="0" />
-  <title>Sorteio · Fabio & Cleber 🎲</title>
+  <title>Roleta · Fabio & Cleber 🎡</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet" />
@@ -32,26 +32,28 @@
   <main class="app">
     <nav class="nav">
       <a href="index.html" class="nav-link">🏠 Dashboard</a>
-      <a href="sorteio.html" class="nav-link active">🎲 Sorteio</a>
-      <a href="roleta.html" class="nav-link">🎡 Roleta</a>
+      <a href="sorteio.html" class="nav-link">🎲 Sorteio</a>
+      <a href="roleta.html" class="nav-link active">🎡 Roleta</a>
       <a href="recadinho.html" class="nav-link">🐦‍⬛ Corvo</a>
     </nav>
 
     <header class="header">
-      <h1 class="title">Fabio <span class="accent">&amp;</span> Cleber 🎲</h1>
-      <p class="subtitle">✅ Sorteio 100% justo, 50/50 pra cada!</p>
-      <div class="today" id="today"></div>
+      <h1 class="title">A Roleta <span class="accent">Secreta</span> 🎡</h1>
+      <p class="subtitle">Ninguém sabe o que vem... gira e descobre 👀</p>
     </header>
 
-    <section class="controls">
-      <button class="btn btn-primary" id="drawAll">🎯 Sortear tudo</button>
-      <button class="btn btn-ghost" id="resetAll">↺ Limpar</button>
+    <section class="roulette-panel">
+      <div class="roulette-stage">
+        <div class="roulette-pointer" aria-hidden="true"></div>
+        <canvas id="wheel" width="340" height="340"></canvas>
+      </div>
+      <button class="btn btn-primary" id="spin">Girar 🎡</button>
+      <div class="roulette-result" id="roulette-result">Gira pra ver!</div>
+      <div class="roulette-spins" id="roulette-spins"></div>
     </section>
 
-    <section class="grid" id="grid"></section>
-
     <footer class="footer">
-      <p>Feito com 💚 (e total imparcialidade) para o Fabio e o Cleber.</p>
+      <p>Feito com 💚 para o Fabio e o Cleber.</p>
     </footer>
   </main>
 
@@ -61,7 +63,7 @@
     // Load scripts in order (config first) with the same cache-buster.
     (function () {
       var v = window.__ASSET_VERSION__;
-      var scripts = ["config.js", "app.js"];
+      var scripts = ["config.js", "roleta.js"];
       (function load(i) {
         if (i >= scripts.length) return;
         var s = document.createElement("script");
