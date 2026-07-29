@@ -42,13 +42,13 @@
       <div class="today" id="today"></div>
     </header>
 
-    <section class="photo-panel" id="photo"></section>
-
     <section class="feelings-panel" id="feelings"></section>
 
     <section class="grid dashboard-grid" id="dashboard"></section>
 
     <section class="pendings-panel" id="pendings"></section>
+
+    <section class="photo-panel" id="photo"></section>
 
     <footer class="footer">
       <p>Feito com 💚 para o Fabio e o Cleber.</p>
@@ -59,7 +59,7 @@
     // Load scripts in order (config first) with the same cache-buster.
     (function () {
       var v = window.__ASSET_VERSION__;
-      var scripts = ["config.js", "dashboard.js"];
+      var scripts = ["config.js", "dashboard.js", "notify.js"];
       (function load(i) {
         if (i >= scripts.length) return;
         var s = document.createElement("script");

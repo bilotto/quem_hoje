@@ -49,11 +49,26 @@ window.CONFIG = {
     ],
   },
 
-  // Each person's current mood (edit whenever it changes).
+  // Default mood for each person (used until they change it on the site;
+  // their choice is then saved in the browser).
   feelings: {
-    cleber: { emoji: "🤢", mood: "Meio enjoado" },
+    cleber: { emoji: "😐", mood: "Meio normal" },
     fabio: { emoji: "😐", mood: "Meio normal" },
   },
+
+  // Mood options offered when someone taps their card to change it.
+  moodOptions: [
+    { emoji: "😐", mood: "Meio normal" },
+    { emoji: "🥰", mood: "Apaixonado" },
+    { emoji: "🥳", mood: "Animado" },
+    { emoji: "😴", mood: "Com sono" },
+    { emoji: "🍔", mood: "Com fome" },
+    { emoji: "🤢", mood: "Meio enjoado" },
+    { emoji: "😤", mood: "Estressado" },
+    { emoji: "😔", mood: "Pra baixo" },
+    { emoji: "🧟", mood: "Morto" },
+    { emoji: "😏", mood: "Safado" },
+  ],
 
   // The couple's favorites. Add as many as you want.
   favorites: [

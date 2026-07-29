@@ -197,21 +197,64 @@ function renderPhoto() {
   });
 }
 
-// Show how each person is feeling today (from CONFIG.feelings).
+const MOOD_STORAGE_PREFIX = "mood_";
+
+// Current mood: the person's saved choice, or the config default.
+function getMood(key) {
+  try {
+    const raw = localStorage.getItem(MOOD_STORAGE_PREFIX + key);
+    if (raw) return JSON.parse(raw);
+  } catch (e) {
+    /* ignore storage errors */
+  }
+  return CONFIG.feelings[key];
+}
+
+function setMood(key, mood) {
+  try {
+    localStorage.setItem(MOOD_STORAGE_PREFIX + key, JSON.stringify(mood));
+  } catch (e) {
+    /* ignore storage errors */
+  }
+}
+
+// Fire a "corvo" (push) announcing the new mood. Never blocks the UI.
+async function announceMood(key, mood) {
+  const player = CONFIG.players[key] || { name: key };
+  const message = `${player.name} agora está: ${mood.emoji} ${mood.mood}`;
+  if (typeof sendNotification === "function") {
+    try {
+      await sendNotification(message, "Mudança de humor 🌡️");
+    } catch (e) {
+      /* offline or ntfy down: ignore */
+    }
+  }
+}
+
+// Editable "how are we feeling" cards (tap to change, saved locally).
 function renderFeelings() {
   const feelings = CONFIG.feelings || {};
+  const options = CONFIG.moodOptions || [];
   const section = document.getElementById("feelings");
   if (!section) return;
 
   const cards = Object.keys(feelings)
     .map((key) => {
       const player = CONFIG.players[key] || { name: key, cls: "" };
-      const f = feelings[key];
+      const m = getMood(key);
+      const menu = options
+        .map(
+          (o, i) =>
+            `<button class="feeling-option" data-person="${key}" data-i="${i}">${o.emoji} ${o.mood}</button>`
+        )
+        .join("");
       return `
-        <div class="feeling-card ${player.cls}-border">
-          <div class="feeling-emoji">${f.emoji}</div>
+        <div class="feeling-card ${player.cls}-border" data-person="${key}">
+          <div class="feeling-emoji">${m.emoji}</div>
           <div class="feeling-name ${player.cls}-text">${player.name}</div>
-          <div class="feeling-mood">${f.mood}</div>
+          <div class="feeling-mood">${m.mood}</div>
+          <div class="feeling-hint">toque para mudar</div>
+          <div class="feeling-menu">${menu}</div>
         </div>`;
     })
     .join("");
@@ -220,6 +263,33 @@ function renderFeelings() {
     <h2 class="feelings-title">🌡️ Como estamos hoje</h2>
     <div class="feelings-cards">${cards}</div>
   `;
+
+  wireFeelings(section);
+}
+
+function wireFeelings(section) {
+  const cards = section.querySelectorAll(".feeling-card");
+
+  cards.forEach((card) => {
+    card.addEventListener("click", (e) => {
+      if (e.target.closest(".feeling-option")) return;
+      e.stopPropagation();
+      const wasOpen = card.classList.contains("open");
+      cards.forEach((c) => c.classList.remove("open"));
+      if (!wasOpen) card.classList.add("open");
+    });
+  });
+
+  section.querySelectorAll(".feeling-option").forEach((opt) => {
+    opt.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const key = opt.dataset.person;
+      const mood = CONFIG.moodOptions[Number(opt.dataset.i)];
+      setMood(key, mood);
+      announceMood(key, mood);
+      renderFeelings();
+    });
+  });
 }
 
 function renderAll() {
@@ -247,6 +317,11 @@ function watchDayChange() {
 function init() {
   renderAll();
   watchDayChange();
+  document.addEventListener("click", () => {
+    document
+      .querySelectorAll(".feeling-card.open")
+      .forEach((el) => el.classList.remove("open"));
+  });
 }
 
 // Run now if the DOM is already parsed (scripts are loaded dynamically),

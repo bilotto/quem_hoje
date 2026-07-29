@@ -5,13 +5,13 @@ const NTFY = CONFIG.ntfy;
 // Publish a message to the ntfy topic (a push lands on the subscribed phone).
 // We publish as JSON so the title/message can contain emojis and accents.
 // (HTTP headers only allow ISO-8859-1, so putting emojis in headers breaks fetch.)
-async function sendNotification(message) {
+async function sendNotification(message, title) {
   const response = await fetch(NTFY.server, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       topic: NTFY.topic,
-      title: NTFY.defaultTitle,
+      title: title || NTFY.defaultTitle,
       message: message,
       tags: ["green_heart"],
     }),

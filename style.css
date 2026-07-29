@@ -487,12 +487,16 @@ body {
   gap: 14px;
 }
 .feeling-card {
+  position: relative;
   text-align: center;
   background: rgba(0, 0, 0, 0.25);
   border: 1px solid var(--card-border);
   border-radius: 16px;
   padding: 18px 14px;
+  cursor: pointer;
+  transition: transform 0.12s ease, border-color 0.2s ease;
 }
+.feeling-card:hover { transform: translateY(-2px); }
 .feeling-emoji { font-size: 2.6rem; margin-bottom: 6px; }
 .feeling-name {
   font-family: "Fredoka", sans-serif;
@@ -504,6 +508,35 @@ body {
   color: var(--text);
   margin-top: 2px;
 }
+.feeling-hint {
+  margin-top: 6px;
+  font-size: 0.75rem;
+  color: var(--muted);
+  opacity: 0.8;
+}
+.feeling-menu {
+  display: none;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--card-border);
+  grid-template-columns: 1fr;
+  gap: 6px;
+}
+.feeling-card.open .feeling-menu { display: grid; }
+.feeling-card.open .feeling-hint { display: none; }
+.feeling-option {
+  font-family: "Nunito", sans-serif;
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--card-border);
+  border-radius: 10px;
+  padding: 8px 10px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+.feeling-option:hover { background: rgba(255, 255, 255, 0.2); }
 
 .box-emoji { font-size: 2.2rem; }
 .box-question {
