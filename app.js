@@ -8,7 +8,11 @@ const BOXES = CONFIG.boxes;
 const SPIN_MS = 900;
 
 // Fair coin: returns "fabio" 50% of the time, "cleber" otherwise.
-function drawPlayer() {
+// A box can override the outcome with `forceWinner` ("cleber" or "fabio").
+function drawPlayer(box) {
+  if (box && box.forceWinner && PLAYERS[box.forceWinner]) {
+    return PLAYERS[box.forceWinner];
+  }
   return Math.random() < FABIO_CHANCE ? PLAYERS.fabio : PLAYERS.cleber;
 }
 
@@ -71,7 +75,7 @@ function spinBox(index) {
 
     setTimeout(() => {
       clearInterval(flick);
-      const winner = drawPlayer();
+      const winner = drawPlayer(box);
       result.className = `result ${winner.cls}`;
       result.textContent = `${winner.emoji} ${winner.name}`;
       if (extraEl && box.extra) {

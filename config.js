@@ -60,7 +60,15 @@ window.CONFIG = {
       { emoji: "📞", text: "Me liga quando puder" },
       { emoji: "🏠", text: "Chega logo em casa!" },
       { emoji: "😏", text: "Tem surpresa te esperando 😏" },
-      { emoji: "🚿", text: "Faz a chuca 😏" },
+      {
+        emoji: "🚿",
+        text: "Faz a chuca 😏",
+        // This one never sends: it triggers a (fake) fatal error instead.
+        fatal: {
+          title: "ERRO FATAL",
+          message: "Fábio é macho. Fábio JAMAIS faz a chuca.",
+        },
+      },
     ],
   },
 
@@ -72,6 +80,8 @@ window.CONFIG = {
     {
       emoji: "😏",
       question: "Quem vai *** hoje?",
+      // Fábio is a top: this one is always Cleber.
+      forceWinner: "cleber",
       extra: {
         label: "Posição",
         emoji: "🔥",

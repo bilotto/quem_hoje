@@ -319,6 +319,64 @@ body {
 .notify-toast.ok { color: #8dff9e; }
 .notify-toast.error { color: #ff8d8d; }
 
+.fatal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(120, 0, 0, 0.35);
+  backdrop-filter: blur(6px);
+  animation: fatal-in 0.15s ease;
+}
+@keyframes fatal-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.fatal-box {
+  max-width: 460px;
+  width: 100%;
+  text-align: center;
+  background: linear-gradient(135deg, #b00020, #5a0010);
+  border: 2px solid #ff4d6d;
+  border-radius: 20px;
+  padding: 34px 28px;
+  box-shadow: 0 24px 60px rgba(176, 0, 32, 0.6);
+  animation: fatal-shake 0.5s ease;
+}
+@keyframes fatal-shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-10px); }
+  40% { transform: translateX(10px); }
+  60% { transform: translateX(-6px); }
+  80% { transform: translateX(6px); }
+}
+.fatal-icon { font-size: 3.4rem; margin-bottom: 8px; }
+.fatal-title {
+  font-family: "Fredoka", sans-serif;
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: #fff;
+  margin-bottom: 12px;
+}
+.fatal-message {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #ffd9e0;
+  margin-bottom: 18px;
+  line-height: 1.4;
+}
+.fatal-code {
+  display: block;
+  font-family: monospace;
+  font-size: 0.9rem;
+  color: #ff9db0;
+  margin-bottom: 22px;
+}
+
 .box-emoji { font-size: 2.2rem; }
 .box-question {
   font-family: "Fredoka", sans-serif;

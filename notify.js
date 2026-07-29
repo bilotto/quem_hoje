@@ -32,6 +32,29 @@ function showToast(text, isError) {
   }, 3000);
 }
 
+// Dramatic fake "fatal error" overlay (a joke, sends nothing).
+function showFatalError(fatal) {
+  const existing = document.getElementById("fatal-overlay");
+  if (existing) existing.remove();
+
+  const overlay = document.createElement("div");
+  overlay.id = "fatal-overlay";
+  overlay.className = "fatal-overlay";
+  overlay.innerHTML = `
+    <div class="fatal-box">
+      <div class="fatal-icon">💀</div>
+      <h1 class="fatal-title">${fatal.title}</h1>
+      <p class="fatal-message">${fatal.message}</p>
+      <code class="fatal-code">0xF4B10_15_M4CH0</code>
+      <button class="btn btn-primary" id="fatal-close">Entendi, foi mal 🙏</button>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+  overlay.querySelector("#fatal-close").addEventListener("click", () => {
+    overlay.remove();
+  });
+}
+
 async function handleSend(message, button) {
   if (!message || !message.trim()) return;
   const original = button ? button.textContent : null;
@@ -77,8 +100,12 @@ function renderNotify() {
 
   panel.querySelectorAll(".notify-btn").forEach((btn) => {
     btn.addEventListener("click", () => {
-      const msg = quick[Number(btn.dataset.index)].text;
-      handleSend(msg, btn);
+      const message = quick[Number(btn.dataset.index)];
+      if (message.fatal) {
+        showFatalError(message.fatal);
+        return;
+      }
+      handleSend(message.text, btn);
     });
   });
 
