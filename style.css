@@ -377,6 +377,93 @@ body {
   margin-bottom: 22px;
 }
 
+.photo-panel {
+  margin-bottom: 22px;
+  text-align: center;
+}
+.photo-panel:empty { display: none; }
+.photo-wrap {
+  position: relative;
+  display: inline-block;
+  max-width: 380px;
+  width: 100%;
+  border-radius: 22px;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--card-border);
+}
+.photo-img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.hotspot {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  z-index: 2;
+}
+.hotspot-dot {
+  display: block;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.85);
+  border: 2px solid var(--accent);
+  box-shadow: 0 0 0 0 rgba(255, 209, 102, 0.7);
+  animation: hotspot-pulse 2s infinite;
+}
+.hotspot.fabio .hotspot-dot { border-color: var(--fabio); box-shadow: 0 0 0 0 rgba(77, 208, 255, 0.7); }
+.hotspot.cleber .hotspot-dot { border-color: var(--cleber); box-shadow: 0 0 0 0 rgba(255, 110, 199, 0.7); }
+@keyframes hotspot-pulse {
+  0% { box-shadow: 0 0 0 0 rgba(255, 209, 102, 0.6); }
+  70% { box-shadow: 0 0 0 12px rgba(255, 209, 102, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(255, 209, 102, 0); }
+}
+.hotspot-label {
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 8px);
+  transform: translateX(-50%) scale(0.8);
+  white-space: nowrap;
+  font-family: "Fredoka", sans-serif;
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: #1a1030;
+  background: var(--accent);
+  padding: 6px 12px;
+  border-radius: 999px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.18s ease, transform 0.18s ease;
+}
+.hotspot-label::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 6px solid transparent;
+  border-top-color: var(--accent);
+}
+.hotspot.fabio .hotspot-label { background: var(--fabio); }
+.hotspot.fabio .hotspot-label::after { border-top-color: var(--fabio); }
+.hotspot.cleber .hotspot-label { background: var(--cleber); color: #2a0a1e; }
+.hotspot.cleber .hotspot-label::after { border-top-color: var(--cleber); }
+.hotspot:hover .hotspot-label,
+.hotspot.open .hotspot-label {
+  opacity: 1;
+  transform: translateX(-50%) scale(1);
+}
+.photo-caption {
+  margin-top: 12px;
+  color: var(--muted);
+  font-weight: 700;
+}
+
 .feelings-panel {
   margin-bottom: 22px;
   background: var(--card);

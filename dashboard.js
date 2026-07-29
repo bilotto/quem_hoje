@@ -158,6 +158,45 @@ function renderPendings() {
   `;
 }
 
+// Interactive family photo: dots you can tap/hover to reveal each name.
+function renderPhoto() {
+  const photo = CONFIG.photo;
+  const section = document.getElementById("photo");
+  if (!section || !photo) return;
+
+  const hotspots = (photo.hotspots || [])
+    .map(
+      (h, i) => `
+      <button class="hotspot ${h.cls || ""}" style="left:${h.x}%;top:${h.y}%"
+              data-index="${i}" aria-label="${h.label}">
+        <span class="hotspot-dot"></span>
+        <span class="hotspot-label">${h.emoji} ${h.label}</span>
+      </button>`
+    )
+    .join("");
+
+  section.innerHTML = `
+    <div class="photo-wrap">
+      <img class="photo-img" src="${photo.src}" alt="Fabio, Cleber, Fifi e Joio" />
+      ${hotspots}
+    </div>
+    ${photo.caption ? `<p class="photo-caption">${photo.caption}</p>` : ""}
+  `;
+
+  const spots = section.querySelectorAll(".hotspot");
+  spots.forEach((spot) => {
+    spot.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const wasOpen = spot.classList.contains("open");
+      spots.forEach((s) => s.classList.remove("open"));
+      if (!wasOpen) spot.classList.add("open");
+    });
+  });
+  section.addEventListener("click", () => {
+    spots.forEach((s) => s.classList.remove("open"));
+  });
+}
+
 // Show how each person is feeling today (from CONFIG.feelings).
 function renderFeelings() {
   const feelings = CONFIG.feelings || {};
@@ -185,6 +224,7 @@ function renderFeelings() {
 
 function renderAll() {
   renderToday();
+  renderPhoto();
   renderFeelings();
   renderDashboard();
   renderFavorites();

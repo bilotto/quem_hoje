@@ -36,6 +36,19 @@ window.CONFIG = {
     { who: "Fabio", text: "Confirmar as férias", done: false },
   ],
 
+  // Interactive family photo. Hotspots use x/y as % of the image
+  // (x from the left, y from the top). Tweak them to fine-tune positions.
+  photo: {
+    src: "assets/familia.png",
+    caption: "Toque em cada um pra ver quem é 👇",
+    hotspots: [
+      { label: "Fabio", emoji: "🧑‍💻", x: 37, y: 40, cls: "fabio" },
+      { label: "Cleber", emoji: "😎", x: 74, y: 38, cls: "cleber" },
+      { label: "Fifi", emoji: "🐱", x: 36, y: 64, cls: "" },
+      { label: "Joio", emoji: "🐈", x: 58, y: 64, cls: "" },
+    ],
+  },
+
   // Each person's current mood (edit whenever it changes).
   feelings: {
     cleber: { emoji: "🤢", mood: "Meio enjoado" },
