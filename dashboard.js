@@ -158,8 +158,34 @@ function renderPendings() {
   `;
 }
 
+// Show how each person is feeling today (from CONFIG.feelings).
+function renderFeelings() {
+  const feelings = CONFIG.feelings || {};
+  const section = document.getElementById("feelings");
+  if (!section) return;
+
+  const cards = Object.keys(feelings)
+    .map((key) => {
+      const player = CONFIG.players[key] || { name: key, cls: "" };
+      const f = feelings[key];
+      return `
+        <div class="feeling-card ${player.cls}-border">
+          <div class="feeling-emoji">${f.emoji}</div>
+          <div class="feeling-name ${player.cls}-text">${player.name}</div>
+          <div class="feeling-mood">${f.mood}</div>
+        </div>`;
+    })
+    .join("");
+
+  section.innerHTML = `
+    <h2 class="feelings-title">🌡️ Como estamos hoje</h2>
+    <div class="feelings-cards">${cards}</div>
+  `;
+}
+
 function renderAll() {
   renderToday();
+  renderFeelings();
   renderDashboard();
   renderFavorites();
   renderPendings();

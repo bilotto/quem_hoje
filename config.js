@@ -36,6 +36,12 @@ window.CONFIG = {
     { who: "Fabio", text: "Confirmar as férias", done: false },
   ],
 
+  // Each person's current mood (edit whenever it changes).
+  feelings: {
+    cleber: { emoji: "🤢", mood: "Meio enjoado" },
+    fabio: { emoji: "😐", mood: "Meio normal" },
+  },
+
   // The couple's favorites. Add as many as you want.
   favorites: [
     { emoji: "🍛", label: "Comida favorita", value: "Baião de dois" },

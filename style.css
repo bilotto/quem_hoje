@@ -377,6 +377,47 @@ body {
   margin-bottom: 22px;
 }
 
+.feelings-panel {
+  margin-bottom: 22px;
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: 20px;
+  padding: 22px 26px;
+  backdrop-filter: blur(10px);
+  box-shadow: var(--shadow);
+}
+.feelings-panel:empty { display: none; }
+.feelings-title {
+  font-family: "Fredoka", sans-serif;
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-bottom: 16px;
+  text-align: center;
+}
+.feelings-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 14px;
+}
+.feeling-card {
+  text-align: center;
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid var(--card-border);
+  border-radius: 16px;
+  padding: 18px 14px;
+}
+.feeling-emoji { font-size: 2.6rem; margin-bottom: 6px; }
+.feeling-name {
+  font-family: "Fredoka", sans-serif;
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+.feeling-mood {
+  font-weight: 700;
+  color: var(--text);
+  margin-top: 2px;
+}
+
 .box-emoji { font-size: 2.2rem; }
 .box-question {
   font-family: "Fredoka", sans-serif;
