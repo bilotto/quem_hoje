@@ -6,6 +6,12 @@
  * Both the Dashboard and the Raffle pages read from this single object.
  */
 window.CONFIG = {
+  // Feature flags. Set to false to hide a section in production without
+  // deleting its code (just flip back to true to re-enable it).
+  features: {
+    roulette: false,
+  },
+
   // The two contestants.
   players: {
     cleber: { name: "Cleber", emoji: "😎", cls: "cleber" },

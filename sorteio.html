@@ -61,7 +61,7 @@
     // Load scripts in order (config first) with the same cache-buster.
     (function () {
       var v = window.__ASSET_VERSION__;
-      var scripts = ["config.js", "app.js"];
+      var scripts = ["config.js", "features.js", "app.js"];
       (function load(i) {
         if (i >= scripts.length) return;
         var s = document.createElement("script");
