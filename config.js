@@ -138,8 +138,8 @@ window.CONFIG = {
     {
       emoji: "😏",
       question: "Quem vai *** hoje?",
-      // Fábio is a top: this one is always Cleber.
-      forceWinner: "cleber",
+      // Fair draw now, but if it lands on Fabio the site "crashes".
+      fatalIfFabio: true,
       extra: {
         label: "Posição",
         emoji: "🔥",

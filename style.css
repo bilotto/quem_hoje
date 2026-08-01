@@ -691,6 +691,52 @@ body {
 }
 .feeling-option:hover { background: rgba(255, 255, 255, 0.2); }
 
+.crash-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: #04070d;
+  animation: crash-flicker 0.2s steps(2) 3;
+}
+@keyframes crash-flicker {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+.crash-box {
+  max-width: 520px;
+  width: 100%;
+  text-align: center;
+  color: #ff5470;
+  font-family: monospace;
+}
+.crash-icon { font-size: 3.4rem; margin-bottom: 10px; }
+.crash-title {
+  font-family: monospace;
+  font-size: 1.8rem;
+  letter-spacing: 2px;
+  color: #ff5470;
+  margin-bottom: 10px;
+}
+.crash-message { color: #ff9db0; margin-bottom: 16px; }
+.crash-stack {
+  text-align: left;
+  background: #0a0f18;
+  border: 1px solid #2a3140;
+  border-radius: 10px;
+  padding: 14px 16px;
+  color: #8de1ff;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  overflow-x: auto;
+  margin-bottom: 18px;
+  white-space: pre-wrap;
+}
+.crash-reload { color: #ffd166; font-weight: 700; }
+
 .box-emoji { font-size: 2.2rem; }
 .box-question {
   font-family: "Fredoka", sans-serif;

@@ -78,6 +78,14 @@ function spinBox(index) {
       const winner = drawPlayer(box);
       result.className = `result ${winner.cls}`;
       result.textContent = `${winner.emoji} ${winner.name}`;
+
+      // Joke: if this box lands on Fabio, the whole "site crashes".
+      if (box.fatalIfFabio && winner.cls === "fabio") {
+        setTimeout(showFatalCrash, 700);
+        resolve(winner);
+        return;
+      }
+
       if (extraEl && box.extra) {
         const detail = pickRandom(box.extra.options);
         extraEl.className = "result-extra revealed";
@@ -87,6 +95,41 @@ function spinBox(index) {
       resolve(winner);
     }, SPIN_MS);
   });
+}
+
+// Fake kernel-panic overlay that "crashes" and reloads the page (a joke).
+function showFatalCrash() {
+  const existing = document.getElementById("crash-overlay");
+  if (existing) existing.remove();
+
+  const overlay = document.createElement("div");
+  overlay.id = "crash-overlay";
+  overlay.className = "crash-overlay";
+  overlay.innerHTML = `
+    <div class="crash-box">
+      <div class="crash-icon">💀</div>
+      <h1 class="crash-title">ERRO FATAL DO SISTEMA</h1>
+      <p class="crash-message">Ocorreu uma falha crítica inesperada.</p>
+      <pre class="crash-stack">FATAL: unexpected_result = "Fabio"
+  at sorteioEngine (app.js:∞)
+  at destino (universo.js)
+  at karma (vida.js)
+SIGSEGV: segmentation fault (core dumped)</pre>
+      <p class="crash-reload">Reiniciando o sistema em <span id="crash-count">3</span>...</p>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+
+  let n = 3;
+  const counter = overlay.querySelector("#crash-count");
+  const timer = setInterval(() => {
+    n -= 1;
+    if (counter) counter.textContent = String(Math.max(n, 0));
+    if (n <= 0) {
+      clearInterval(timer);
+      location.reload();
+    }
+  }, 1000);
 }
 
 async function drawAll() {
