@@ -292,8 +292,178 @@ function wireFeelings(section) {
   });
 }
 
+// Whole months elapsed since a past date.
+function monthsSince(dateStr) {
+  const s = parseDate(dateStr);
+  const t = startOfToday();
+  let months = (t.getFullYear() - s.getFullYear()) * 12 + (t.getMonth() - s.getMonth());
+  if (t.getDate() < s.getDate()) months -= 1;
+  return Math.max(months, 0);
+}
+
+// Does today match an event's `when` rule?
+function matchesToday(when) {
+  if (!when) return false;
+  const t = new Date();
+  if (when.range) {
+    const today = startOfToday();
+    const from = when.range.from ? parseDate(when.range.from) : null;
+    const until = when.range.until ? parseDate(when.range.until) : null;
+    if (from && today < from) return false;
+    if (until && today > until) return false;
+    return true;
+  }
+  if (when.fullDate) {
+    const iso = `${t.getFullYear()}-${String(t.getMonth() + 1).padStart(2, "0")}-${String(t.getDate()).padStart(2, "0")}`;
+    return iso === when.fullDate;
+  }
+  if (when.date) {
+    const mmdd = `${String(t.getMonth() + 1).padStart(2, "0")}-${String(t.getDate()).padStart(2, "0")}`;
+    return mmdd === when.date;
+  }
+  if (typeof when.dayOfMonth === "number") return t.getDate() === when.dayOfMonth;
+  if (typeof when.weekday === "number") return t.getDay() === when.weekday;
+  return false;
+}
+
+// Show today's date-based events (anniversaries, etc.) with a celebration.
+function renderEvents() {
+  const events = CONFIG.events || [];
+  const section = document.getElementById("events");
+  if (!section) return;
+
+  const active = events.filter((e) => matchesToday(e.when));
+  if (!active.length) {
+    section.innerHTML = "";
+    return;
+  }
+
+  section.innerHTML = active
+    .map((e, idx) => {
+      let msg = e.message || "";
+      if (e.countFrom && CONFIG.dates[e.countFrom]) {
+        const m = monthsSince(CONFIG.dates[e.countFrom]);
+        msg += ` (${m} ${m === 1 ? "mês" : "meses"} juntos!)`;
+      }
+      if (e.countdownTo) {
+        const d = daysUntil(e.countdownTo);
+        if (d > 0) msg += ` ⏳ Faltam ${d} ${d === 1 ? "dia" : "dias"}!`;
+        else if (d === 0) msg += " 🎯 É HOJE!";
+      }
+      return `
+        <div class="event-banner">
+          <div class="event-emoji">${e.emoji || "🎉"}</div>
+          <div class="event-text">
+            <div class="event-title">${e.title || ""}</div>
+            <div class="event-msg">${msg}</div>
+          </div>
+          <button class="btn btn-primary event-party-btn" data-idx="${idx}">🎉 Festa!</button>
+        </div>`;
+    })
+    .join("");
+
+  section.querySelectorAll(".event-party-btn").forEach((btn) => {
+    btn.addEventListener("click", () => celebrate(active[Number(btn.dataset.idx)]));
+  });
+
+  if (active.some((e) => e.party !== false)) confettiBurst();
+
+  // Mega events auto-open the big party once per browser session.
+  active.forEach((e) => {
+    if (!e.mega) return;
+    const key = `megaParty_${e.id || e.title}`;
+    try {
+      if (sessionStorage.getItem(key)) return;
+      sessionStorage.setItem(key, "1");
+    } catch (err) {
+      /* ignore storage errors */
+    }
+    celebrate(e);
+  });
+}
+
+function confettiBurst(count) {
+  let box = document.getElementById("confetti");
+  if (!box) {
+    box = document.createElement("div");
+    box.className = "confetti";
+    box.id = "confetti";
+    document.body.appendChild(box);
+  }
+  const colors = ["#ffd166", "#ff6ec7", "#4dd0ff", "#7b2ff7", "#8dff9e"];
+  const total = count || 30;
+  for (let i = 0; i < total; i++) {
+    const piece = document.createElement("span");
+    piece.style.left = `${Math.random() * 100}%`;
+    piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+    piece.style.animationDuration = `${1 + Math.random() * 1.2}s`;
+    piece.style.animationDelay = `${Math.random() * 0.2}s`;
+    box.appendChild(piece);
+    setTimeout(() => piece.remove(), 2600);
+  }
+}
+
+function spawnPartyEmoji(box, emojis) {
+  const span = document.createElement("span");
+  span.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+  span.style.left = `${Math.random() * 100}%`;
+  span.style.fontSize = `${1.4 + Math.random() * 1.8}rem`;
+  span.style.animationDuration = `${2 + Math.random() * 2}s`;
+  box.appendChild(span);
+  setTimeout(() => span.remove(), 4200);
+}
+
+// Full-screen celebration overlay for an event.
+function celebrate(ev) {
+  const existing = document.getElementById("event-party");
+  if (existing) existing.remove();
+
+  const mega = !!ev.mega;
+  const overlay = document.createElement("div");
+  overlay.id = "event-party";
+  overlay.className = `party-overlay${mega ? " mega" : ""}`;
+  overlay.innerHTML = `
+    <div class="party-rays" aria-hidden="true"></div>
+    <div class="party-emoji" id="event-party-emoji" aria-hidden="true"></div>
+    <div class="party-card">
+      <div class="party-trophy">${ev.emoji || "🎉"}</div>
+      <h1 class="party-title">${ev.title || "Parabéns!"}</h1>
+      <p class="party-prize">${ev.message || ""}</p>
+      <button class="btn btn-primary" id="event-party-close">Aeee! 🎉</button>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+
+  const timers = [];
+  const stop = () => {
+    timers.forEach(clearInterval);
+    overlay.remove();
+  };
+  overlay.querySelector("#event-party-close").addEventListener("click", stop);
+
+  const perBurst = mega ? 60 : 30;
+  const maxBursts = mega ? 20 : 8;
+  const burstEvery = mega ? 300 : 420;
+  let bursts = 0;
+  timers.push(
+    setInterval(() => {
+      confettiBurst(perBurst);
+      if (++bursts >= maxBursts) timers.forEach(clearInterval);
+    }, burstEvery)
+  );
+
+  const rainBox = overlay.querySelector("#event-party-emoji");
+  const emojis = mega
+    ? ["🎉", "🎊", "🥳", "❤️", "✨", "🎆", "💕", "🚗", "🧳", "🍾", "🏖️", "🔥"]
+    : ["🎉", "🎊", "🥳", "❤️", "✨", "🎆", "💕"];
+  const rain = setInterval(() => spawnPartyEmoji(rainBox, emojis), mega ? 90 : 160);
+  timers.push(rain);
+  setTimeout(() => clearInterval(rain), mega ? 9000 : 6500);
+}
+
 function renderAll() {
   renderToday();
+  renderEvents();
   renderPhoto();
   renderFeelings();
   renderDashboard();

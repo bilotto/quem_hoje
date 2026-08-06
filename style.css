@@ -530,6 +530,28 @@ body {
   margin-bottom: 22px;
 }
 
+/* Mega party: bigger, brighter, shakier */
+.party-overlay.mega {
+  background: radial-gradient(circle at 50% 40%, rgba(255, 110, 199, 0.6), rgba(15, 10, 30, 0.94));
+  animation: party-fade 0.25s ease, mega-shake 0.4s ease-in-out infinite;
+}
+@keyframes mega-shake {
+  0%, 100% { transform: translate(0, 0); }
+  25% { transform: translate(-4px, 2px); }
+  50% { transform: translate(4px, -3px); }
+  75% { transform: translate(-3px, 3px); }
+}
+.party-overlay.mega .party-rays { animation-duration: 8s; }
+.party-overlay.mega .party-card {
+  border-width: 3px;
+  box-shadow: 0 0 60px rgba(255, 209, 102, 0.7), 0 24px 70px rgba(0, 0, 0, 0.6);
+}
+.party-overlay.mega .party-trophy { font-size: 5.6rem; }
+.party-overlay.mega .party-title {
+  font-size: 2.9rem;
+  animation: party-rainbow 1.5s linear infinite;
+}
+
 .photo-panel {
   margin-bottom: 22px;
   text-align: center;
@@ -617,6 +639,36 @@ body {
   font-weight: 700;
 }
 
+.events-panel { margin-bottom: 22px; }
+.events-panel:empty { display: none; }
+.event-banner {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 18px 22px;
+  border-radius: 20px;
+  background: linear-gradient(135deg, rgba(123, 47, 247, 0.5), rgba(255, 110, 199, 0.5));
+  border: 1px solid var(--accent);
+  box-shadow: var(--shadow);
+  animation: event-pop 0.5s cubic-bezier(0.2, 1.4, 0.4, 1);
+}
+@keyframes event-pop {
+  0% { transform: scale(0.9); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+.event-emoji {
+  font-size: 2.6rem;
+  animation: party-bounce 1s ease-in-out infinite;
+}
+.event-text { flex: 1; }
+.event-title {
+  font-family: "Fredoka", sans-serif;
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+.event-msg { color: var(--text); font-weight: 700; opacity: 0.9; }
+.event-party-btn { white-space: nowrap; }
+
 .feelings-panel {
   margin-bottom: 22px;
   background: var(--card);
@@ -700,42 +752,127 @@ body {
   justify-content: center;
   padding: 24px;
   background: #04070d;
-  animation: crash-flicker 0.2s steps(2) 3;
+  overflow: hidden;
+  animation: crash-flicker 0.12s steps(2) infinite;
 }
 @keyframes crash-flicker {
   0%, 100% { opacity: 1; }
-  50% { opacity: 0.6; }
+  50% { opacity: 0.85; }
+}
+.crash-overlay.apocalypse {
+  animation: crash-shake 0.25s infinite;
+  background: #0a0000;
+}
+@keyframes crash-shake {
+  0% { transform: translate(0, 0); }
+  20% { transform: translate(-6px, 3px); }
+  40% { transform: translate(5px, -4px); }
+  60% { transform: translate(-4px, 5px); filter: invert(1); }
+  80% { transform: translate(6px, -2px); }
+  100% { transform: translate(0, 0); }
+}
+.crash-scanlines {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.04) 0px,
+    rgba(255, 255, 255, 0.04) 1px,
+    transparent 2px,
+    transparent 4px
+  );
+  mix-blend-mode: overlay;
 }
 .crash-box {
-  max-width: 520px;
+  position: relative;
+  z-index: 2;
+  max-width: 560px;
   width: 100%;
-  text-align: center;
+  text-align: left;
   color: #ff5470;
   font-family: monospace;
 }
-.crash-icon { font-size: 3.4rem; margin-bottom: 10px; }
+.crash-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+.crash-icon { font-size: 2.8rem; }
 .crash-title {
+  position: relative;
   font-family: monospace;
   font-size: 1.8rem;
-  letter-spacing: 2px;
+  letter-spacing: 3px;
   color: #ff5470;
-  margin-bottom: 10px;
+  animation: glitch 0.5s infinite;
 }
-.crash-message { color: #ff9db0; margin-bottom: 16px; }
-.crash-stack {
-  text-align: left;
+.crash-title::before,
+.crash-title::after {
+  content: attr(data-text);
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  overflow: hidden;
+}
+.crash-title::before { color: #00e5ff; transform: translate(-2px, 0); clip-path: inset(0 0 55% 0); }
+.crash-title::after { color: #ff00d4; transform: translate(2px, 0); clip-path: inset(55% 0 0 0); }
+@keyframes glitch {
+  0%, 100% { transform: translate(0, 0); }
+  25% { transform: translate(-2px, 1px); }
+  50% { transform: translate(2px, -1px); }
+  75% { transform: translate(-1px, -1px); }
+}
+.crash-log {
   background: #0a0f18;
   border: 1px solid #2a3140;
   border-radius: 10px;
   padding: 14px 16px;
   color: #8de1ff;
   font-size: 0.85rem;
-  line-height: 1.5;
-  overflow-x: auto;
-  margin-bottom: 18px;
+  line-height: 1.6;
+  min-height: 8em;
+  max-height: 45vh;
+  overflow: hidden;
   white-space: pre-wrap;
 }
-.crash-reload { color: #ffd166; font-weight: 700; }
+.crash-apocalypse {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 10px;
+  background: radial-gradient(circle at 50% 45%, rgba(120, 0, 0, 0.85), rgba(10, 0, 0, 0.97));
+  animation: crash-flicker 0.1s steps(2) infinite;
+}
+.crash-end {
+  position: relative;
+  font-family: "Fredoka", monospace, sans-serif;
+  font-size: clamp(2.6rem, 11vw, 5.5rem);
+  font-weight: 700;
+  letter-spacing: 4px;
+  color: #ff2d55;
+  text-shadow: 0 0 18px rgba(255, 45, 85, 0.8);
+  animation: glitch 0.35s infinite;
+}
+.crash-end::before,
+.crash-end::after {
+  content: attr(data-text);
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+}
+.crash-end::before { color: #00e5ff; transform: translate(-4px, 2px); clip-path: inset(0 0 50% 0); }
+.crash-end::after { color: #ff00d4; transform: translate(4px, -2px); clip-path: inset(50% 0 0 0); }
+.crash-sub { color: #ffb3c0; font-family: monospace; font-size: 1.1rem; }
+.crash-reload { color: #ffd166; font-weight: 700; font-family: monospace; }
 
 .box-emoji { font-size: 2.2rem; }
 .box-question {

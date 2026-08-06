@@ -76,6 +76,35 @@ window.CONFIG = {
     { emoji: "😏", mood: "Safado" },
   ],
 
+  // Date-based events. On a matching day the Dashboard shows a celebration.
+  // `when` supports one of:
+  //   { dayOfMonth: 20 }      -> every 20th
+  //   { date: "12-25" }       -> every year on MM-DD
+  //   { fullDate: "2026-12-31" } -> one specific day
+  //   { weekday: 5 }          -> every Friday (0 = Sunday)
+  // `countFrom` (optional) points to a dates key to append "X meses juntos".
+  // `when` also supports a date range: { range: { from: "YYYY-MM-DD", until: "YYYY-MM-DD" } }.
+  // `countdownTo` (optional) appends "Faltam X dias". `mega: true` = huge party.
+  events: [
+    {
+      when: { range: { from: "2026-08-06", until: "2026-08-16" } },
+      emoji: "🚗",
+      title: "VIAGEM PRA JAÚ CONFIRMADA!",
+      message: "Bora pra Jaú no final de semana do dia 15 de agosto! 🧳🎉",
+      countdownTo: "2026-08-15",
+      party: true,
+      mega: true,
+    },
+    {
+      when: { dayOfMonth: 20 },
+      emoji: "🎉",
+      title: "Feliz mêsversário!",
+      message: "Hoje o namoro de vocês completa mais um mês!",
+      countFrom: "relationshipStart",
+      party: true,
+    },
+  ],
+
   // The couple's favorites. Add as many as you want.
   favorites: [
     { emoji: "🍛", label: "Comida favorita", value: "Baião de dois" },

@@ -97,7 +97,21 @@ function spinBox(index) {
   });
 }
 
-// Fake kernel-panic overlay that "crashes" and reloads the page (a joke).
+// Apocalyptic fake crash: a cascade of absurd errors, glitch, then reload.
+const CRASH_LINES = [
+  "> FATAL: ZeroDivisionError: divisão por zero detectada",
+  "> reality.integrity_check() ......... FALHOU",
+  "> ERRO: inconsistência no mundo (world_state != expected)",
+  "> kernel panic - not syncing: o Fabio deu",
+  "> tentando reverter o universo .......... FALHOU",
+  "> propagando falha para dimensões vizinhas...",
+  "> [WARN] leis da física comprometidas",
+  "> [ERRO] causalidade perdida",
+  "> [ERRO] gravidade retornou NaN",
+  "> [CRÍTICO] o tempo começou a andar pra trás",
+  "> desligando a realidade ............... ██████████ 100%",
+];
+
 function showFatalCrash() {
   const existing = document.getElementById("crash-overlay");
   if (existing) existing.remove();
@@ -106,22 +120,43 @@ function showFatalCrash() {
   overlay.id = "crash-overlay";
   overlay.className = "crash-overlay";
   overlay.innerHTML = `
+    <div class="crash-scanlines" aria-hidden="true"></div>
     <div class="crash-box">
-      <div class="crash-icon">💀</div>
-      <h1 class="crash-title">ERRO FATAL DO SISTEMA</h1>
-      <p class="crash-message">Ocorreu uma falha crítica inesperada.</p>
-      <pre class="crash-stack">FATAL: unexpected_result = "Fabio"
-  at sorteioEngine (app.js:∞)
-  at destino (universo.js)
-  at karma (vida.js)
-SIGSEGV: segmentation fault (core dumped)</pre>
-      <p class="crash-reload">Reiniciando o sistema em <span id="crash-count">3</span>...</p>
+      <div class="crash-header">
+        <span class="crash-icon">💀</span>
+        <span class="crash-title" data-text="ERRO FATAL">ERRO FATAL</span>
+      </div>
+      <pre class="crash-log" id="crash-log"></pre>
     </div>
   `;
   document.body.appendChild(overlay);
 
+  const log = overlay.querySelector("#crash-log");
+  let i = 0;
+  const feed = setInterval(() => {
+    if (i < CRASH_LINES.length) {
+      log.textContent += CRASH_LINES[i] + "\n";
+      i += 1;
+      return;
+    }
+    clearInterval(feed);
+    triggerApocalypse(overlay);
+  }, 320);
+}
+
+function triggerApocalypse(overlay) {
+  overlay.classList.add("apocalypse");
+  const banner = document.createElement("div");
+  banner.className = "crash-apocalypse";
+  banner.innerHTML = `
+    <div class="crash-end" data-text="FIM DE TUDO">FIM DE TUDO</div>
+    <p class="crash-sub">A realidade foi corrompida.</p>
+    <p class="crash-reload">Reconstruindo o universo em <span id="crash-count">3</span>...</p>
+  `;
+  overlay.appendChild(banner);
+
   let n = 3;
-  const counter = overlay.querySelector("#crash-count");
+  const counter = banner.querySelector("#crash-count");
   const timer = setInterval(() => {
     n -= 1;
     if (counter) counter.textContent = String(Math.max(n, 0));
