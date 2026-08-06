@@ -424,6 +424,7 @@ function celebrate(ev) {
   overlay.className = `party-overlay${mega ? " mega" : ""}`;
   overlay.innerHTML = `
     <div class="party-rays" aria-hidden="true"></div>
+    <div class="fabio-storm" id="fabio-storm" aria-hidden="true"></div>
     <div class="party-emoji" id="event-party-emoji" aria-hidden="true"></div>
     <div class="party-card">
       <div class="party-trophy">${ev.emoji || "🎉"}</div>
@@ -459,6 +460,33 @@ function celebrate(ev) {
   const rain = setInterval(() => spawnPartyEmoji(rainBox, emojis), mega ? 90 : 160);
   timers.push(rain);
   setTimeout(() => clearInterval(rain), mega ? 9000 : 6500);
+
+  // Psychedelic Fabio storm.
+  const stickers = (CONFIG.party && CONFIG.party.stickers) || [];
+  if (stickers.length) {
+    const stormBox = overlay.querySelector("#fabio-storm");
+    const perTick = mega ? 4 : 2;
+    const storm = setInterval(() => {
+      for (let i = 0; i < perTick; i++) spawnSticker(stormBox, stickers, mega);
+    }, mega ? 70 : 150);
+    timers.push(storm);
+    setTimeout(() => clearInterval(storm), mega ? 9000 : 6500);
+  }
+}
+
+// One Fabio sticker: pops in somewhere, spins, hue-shifts, then fades.
+function spawnSticker(box, stickers, mega) {
+  const img = document.createElement("img");
+  img.className = `fabio-sticker${mega ? " psycho" : ""}`;
+  img.src = stickers[Math.floor(Math.random() * stickers.length)];
+  img.style.left = `${Math.random() * 92}%`;
+  img.style.top = `${Math.random() * 88}%`;
+  // Wide size range: from tiny to huge.
+  img.style.width = `${40 + Math.random() * 220}px`;
+  img.style.setProperty("--rot", `${Math.random() * 720 - 360}deg`);
+  img.style.animationDuration = `${0.8 + Math.random() * 1.2}s`;
+  box.appendChild(img);
+  setTimeout(() => img.remove(), 2200);
 }
 
 function renderAll() {

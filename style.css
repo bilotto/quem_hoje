@@ -530,6 +530,33 @@ body {
   margin-bottom: 22px;
 }
 
+/* Psychedelic Fabio storm */
+.fabio-storm {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+}
+.fabio-sticker {
+  position: absolute;
+  transform: translate(-50%, -50%) scale(0) rotate(0deg);
+  filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.5));
+  animation: fabio-pop ease-in-out forwards;
+}
+.fabio-sticker.psycho {
+  animation: fabio-pop ease-in-out forwards, fabio-hue 0.6s linear infinite;
+}
+@keyframes fabio-pop {
+  0% { transform: translate(-50%, -50%) scale(0) rotate(0deg); opacity: 0; }
+  30% { transform: translate(-50%, -50%) scale(1.15) rotate(var(--rot)); opacity: 1; }
+  70% { transform: translate(-50%, -50%) scale(1) rotate(var(--rot)); opacity: 1; }
+  100% { transform: translate(-50%, -50%) scale(0.2) rotate(calc(var(--rot) * 2)); opacity: 0; }
+}
+@keyframes fabio-hue {
+  from { filter: hue-rotate(0deg) drop-shadow(0 6px 12px rgba(0, 0, 0, 0.5)); }
+  to { filter: hue-rotate(360deg) drop-shadow(0 6px 12px rgba(0, 0, 0, 0.5)); }
+}
+
 /* Mega party: bigger, brighter, shakier */
 .party-overlay.mega {
   background: radial-gradient(circle at 50% 40%, rgba(255, 110, 199, 0.6), rgba(15, 10, 30, 0.94));

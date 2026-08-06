@@ -105,6 +105,19 @@ window.CONFIG = {
     },
   ],
 
+  // Stickers rained during parties (psychedelic Fabio storm).
+  party: {
+    stickers: ["assets/fabio-sticker.png"],
+  },
+
+  // "Fabio Comilão" mini-game: move Fabio to eat the foods that appear.
+  game: {
+    sticker: "assets/fabio-sticker.png",
+    durationSec: 30,
+    spawnMs: 650,
+    foods: ["🍖", "🍗", "🥩", "🥓", "🌭", "🍔", "🍕", "🍟", "🌮", "🧀", "🍤", "🍺"],
+  },
+
   // The couple's favorites. Add as many as you want.
   favorites: [
     { emoji: "🍛", label: "Comida favorita", value: "Baião de dois" },
