@@ -110,12 +110,21 @@ window.CONFIG = {
     stickers: ["assets/fabio-sticker.png"],
   },
 
-  // "Fabio Comilão" mini-game: move Fabio to eat the foods that appear.
+  // "Fabio Comilão" mini-game.
+  // PHASE 1 (current): only the eggplant 🍆 is a trap. To win you must eat
+  // `goal` foods before time runs out - nearly impossible, so you tend to
+  // grab the eggplant by accident and lose with a "fatal error".
+  // PHASE 2 (later): manTraps / womanTraps below are kept for future use.
   game: {
     sticker: "assets/fabio-sticker.png",
     durationSec: 30,
     spawnMs: 650,
+    goal: 60,
     foods: ["🍖", "🍗", "🥩", "🥓", "🌭", "🍔", "🍕", "🍟", "🌮", "🧀", "🍤", "🍺"],
+    trap: "🍆",
+    // Reserved for phase 2 (not used yet):
+    manTraps: ["🍆", "👨", "🧔", "👨‍🦰", "👨‍🦱", "👨‍🦳", "🕺", "💪", "👦"],
+    womanTraps: ["👩", "💃", "👩‍🦰", "👱‍♀️", "🚺"],
   },
 
   // The couple's favorites. Add as many as you want.

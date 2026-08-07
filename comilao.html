@@ -6,7 +6,7 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
   <meta http-equiv="Pragma" content="no-cache" />
   <meta http-equiv="Expires" content="0" />
-  <title>Roleta · Fabio & Cleber 🎡</title>
+  <title>Fabio Comilão · Fabio & Cleber 😋</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet" />
@@ -33,24 +33,27 @@
     <nav class="nav">
       <a href="index.html" class="nav-link">🏠 Dashboard</a>
       <a href="sorteio.html" class="nav-link">🎲 Sorteio</a>
-      <a href="roleta.html" class="nav-link active">🎡 Roleta</a>
-      <a href="jogos.html" class="nav-link nav-hot">🎮 Jogos</a>
+      <a href="roleta.html" class="nav-link">🎡 Roleta</a>
+      <a href="jogos.html" class="nav-link nav-hot active">🎮 Jogos</a>
       <a href="recadinho.html" class="nav-link">🐦‍⬛ Corvo</a>
     </nav>
 
     <header class="header">
-      <h1 class="title">A Roleta <span class="accent">Secreta</span> 🎡</h1>
-      <p class="subtitle">Ninguém sabe o que vem... gira e descobre 👀</p>
+      <h1 class="title">Fabio <span class="accent">Comilão</span> 😋</h1>
+      <p class="subtitle">O poder dele é comer toda comida na frente. Prove!</p>
     </header>
 
-    <section class="roulette-panel">
-      <div class="roulette-stage">
-        <div class="roulette-pointer" aria-hidden="true"></div>
-        <canvas id="wheel" width="340" height="340"></canvas>
+    <section class="game-panel">
+      <div class="game-hud">
+        <span class="game-stat">🍽️ Comidas: <b id="score">0</b></span>
+        <span class="game-stat">⏱️ Tempo: <b id="time">30</b>s</span>
+        <span class="game-stat">🏆 Recorde: <b id="record">0</b></span>
       </div>
-      <button class="btn btn-primary" id="spin">Girar 🎡</button>
-      <div class="roulette-result" id="roulette-result">Gira pra ver!</div>
-      <div class="roulette-spins" id="roulette-spins"></div>
+      <div class="game-area" id="game-area">
+        <img class="game-player" id="player" alt="Fabio" />
+        <div class="game-hint" id="game-hint">Mexa o mouse (ou arraste o dedo) pra comer!</div>
+        <button class="btn btn-primary game-start" id="start">Começar 😋</button>
+      </div>
     </section>
 
     <footer class="footer">
@@ -58,13 +61,11 @@
     </footer>
   </main>
 
-  <div class="confetti" id="confetti" aria-hidden="true"></div>
-
   <script>
     // Load scripts in order (config first) with the same cache-buster.
     (function () {
       var v = window.__ASSET_VERSION__;
-      var scripts = ["config.js", "features.js", "roleta.js"];
+      var scripts = ["config.js", "features.js", "comilao.js"];
       (function load(i) {
         if (i >= scripts.length) return;
         var s = document.createElement("script");

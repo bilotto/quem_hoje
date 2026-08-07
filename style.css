@@ -58,6 +58,7 @@ body {
 
 .nav {
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
   gap: 10px;
   margin-bottom: 28px;
@@ -78,6 +79,92 @@ body {
   color: #fff;
   background: linear-gradient(135deg, #7b2ff7, var(--cleber));
   border-color: transparent;
+}
+
+/* Highlighted "Jogos" tab: rainbow shine, glow pulse and a NOVO badge. */
+.nav-hot {
+  position: relative;
+  color: #0a0a12;
+  background: linear-gradient(135deg, #ffd166, #ff6ec7, #4dd0ff);
+  background-size: 200% 100%;
+  border-color: transparent;
+  font-weight: 700;
+  animation: nav-hot-shine 4s linear infinite, nav-hot-glow 1.8s ease-in-out infinite;
+}
+.nav-hot:hover { color: #0a0a12; }
+.nav-hot.active {
+  color: #0a0a12;
+  background: linear-gradient(135deg, #ffd166, #ff6ec7, #4dd0ff);
+  background-size: 200% 100%;
+}
+.nav-hot::after {
+  content: "NOVO";
+  position: absolute;
+  top: -8px;
+  right: -6px;
+  background: #ff3b6b;
+  color: #fff;
+  font-size: 0.6rem;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  padding: 2px 6px;
+  border-radius: 999px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+}
+@keyframes nav-hot-shine {
+  to { background-position: 200% 0; }
+}
+@keyframes nav-hot-glow {
+  0%, 100% { box-shadow: 0 0 0 rgba(255, 110, 199, 0); }
+  50% { box-shadow: 0 0 18px rgba(255, 110, 199, 0.7); }
+}
+
+/* Games hub */
+.games-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 18px;
+  margin-bottom: 40px;
+}
+.game-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  text-decoration: none;
+  padding: 30px 24px;
+  border-radius: 22px;
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  box-shadow: var(--shadow);
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+}
+.game-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--accent);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.4);
+}
+.game-card-emoji {
+  font-size: 3.4rem;
+  margin-bottom: 8px;
+}
+.game-card-title {
+  font-family: "Fredoka", sans-serif;
+  color: var(--text);
+  margin: 0 0 6px;
+}
+.game-card-desc {
+  color: var(--muted);
+  font-size: 0.95rem;
+  margin: 0 0 18px;
+}
+.game-card-cta {
+  font-family: "Fredoka", sans-serif;
+  font-weight: 700;
+  color: #fff;
+  background: linear-gradient(135deg, #7b2ff7, var(--cleber));
+  padding: 10px 22px;
+  border-radius: 999px;
 }
 
 .header { text-align: center; margin-bottom: 28px; }
@@ -579,6 +666,23 @@ body {
   animation: party-rainbow 1.5s linear infinite;
 }
 
+/* On phones the celebration card was covering the Fabio storm behind it.
+   Shrink it and make it slightly see-through so the Fabios show around. */
+@media (max-width: 600px) {
+  .party-overlay { padding: 16px; }
+  .party-card {
+    width: auto;
+    max-width: 300px;
+    padding: 20px 18px;
+    background: rgba(15, 10, 30, 0.6);
+  }
+  .party-trophy { font-size: 3.2rem; }
+  .party-title { font-size: 1.7rem; margin: 4px 0 8px; }
+  .party-prize { font-size: 1rem; margin-bottom: 16px; }
+  .party-overlay.mega .party-trophy { font-size: 3.6rem; }
+  .party-overlay.mega .party-title { font-size: 1.9rem; }
+}
+
 .photo-panel {
   margin-bottom: 22px;
   text-align: center;
@@ -901,6 +1005,17 @@ body {
 .crash-sub { color: #ffb3c0; font-family: monospace; font-size: 1.1rem; }
 .crash-reload { color: #ffd166; font-weight: 700; font-family: monospace; }
 
+/* Woman trap: an even more absurd, end-of-the-universe variant. */
+.crash-overlay.mega.apocalypse { animation: crash-shake 0.14s infinite; }
+.crash-overlay.mega .crash-apocalypse {
+  background: radial-gradient(circle at 50% 45%, rgba(160, 0, 120, 0.92), rgba(5, 0, 15, 0.98));
+  animation: crash-flicker 0.08s steps(2) infinite;
+}
+.crash-overlay.mega .crash-end {
+  font-size: clamp(3rem, 13vw, 7rem);
+  animation: glitch 0.2s infinite;
+}
+
 .box-emoji { font-size: 2.2rem; }
 .box-question {
   font-family: "Fredoka", sans-serif;
@@ -981,6 +1096,151 @@ body {
   margin-top: 46px;
   color: var(--muted);
   font-size: 0.95rem;
+}
+
+/* ===== Fabio Comilão mini-game ===== */
+.game-panel {
+  margin-top: 8px;
+}
+.game-hud {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px 18px;
+  margin-bottom: 14px;
+}
+.game-stat {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--card-border);
+  border-radius: 999px;
+  padding: 8px 16px;
+  font-family: "Fredoka", sans-serif;
+  font-weight: 600;
+  color: var(--text);
+}
+.game-stat b {
+  color: var(--accent, #7CFFB2);
+}
+.game-area {
+  position: relative;
+  width: 100%;
+  height: 62vh;
+  min-height: 360px;
+  border-radius: 22px;
+  border: 1px solid var(--card-border);
+  background:
+    radial-gradient(circle at 20% 20%, rgba(124, 255, 178, 0.10), transparent 45%),
+    radial-gradient(circle at 80% 70%, rgba(124, 178, 255, 0.10), transparent 45%),
+    rgba(255, 255, 255, 0.04);
+  overflow: hidden;
+  cursor: none;
+  touch-action: none;
+}
+.game-player {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 96px;
+  height: auto;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 3;
+  filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.35));
+  transition: transform 0.05s linear;
+}
+.game-player.chomping {
+  animation: chomp 0.18s ease;
+}
+@keyframes chomp {
+  50% { transform: translate(-50%, -50%) scale(1.22) rotate(-6deg); }
+}
+.game-food {
+  position: absolute;
+  transform: translate(-50%, -50%) scale(0);
+  font-size: 2.3rem;
+  user-select: none;
+  pointer-events: none;
+  z-index: 2;
+  animation: food-pop 0.25s ease forwards;
+}
+@keyframes food-pop {
+  to { transform: translate(-50%, -50%) scale(1); }
+}
+.game-food.eaten {
+  animation: food-eaten 0.18s ease forwards;
+}
+@keyframes food-eaten {
+  to { transform: translate(-50%, -50%) scale(1.8); opacity: 0; }
+}
+.game-food.gone {
+  animation: food-gone 0.2s ease forwards;
+}
+@keyframes food-gone {
+  to { transform: translate(-50%, -50%) scale(0.4); opacity: 0; }
+}
+.game-hint {
+  position: absolute;
+  left: 50%;
+  bottom: 18px;
+  transform: translateX(-50%);
+  color: var(--muted);
+  font-family: "Fredoka", sans-serif;
+  font-size: 0.95rem;
+  text-align: center;
+  pointer-events: none;
+}
+.game-start {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 4;
+  cursor: pointer;
+}
+.gameover-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(8, 12, 24, 0.7);
+  backdrop-filter: blur(4px);
+  animation: food-pop 0.25s ease;
+}
+.gameover-box {
+  text-align: center;
+  padding: 28px 26px;
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--card-border);
+}
+.gameover-emoji {
+  font-size: 3.4rem;
+  animation: chomp 0.6s ease infinite;
+}
+.gameover-title {
+  font-family: "Fredoka", sans-serif;
+  margin: 8px 0 4px;
+  color: var(--text);
+}
+.gameover-score {
+  color: var(--muted);
+  margin-bottom: 16px;
+}
+.gameover-score b {
+  color: var(--accent, #7CFFB2);
+  font-size: 1.2rem;
+}
+.gameover-note {
+  color: var(--muted);
+  font-size: 0.9rem;
+  font-style: italic;
+  margin-bottom: 16px;
+}
+.gameover-overlay.win .gameover-box {
+  border-color: var(--accent);
+  box-shadow: 0 0 50px rgba(255, 209, 102, 0.5);
 }
 
 /* confetti */
