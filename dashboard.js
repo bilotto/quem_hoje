@@ -357,13 +357,19 @@ function renderEvents() {
             <div class="event-title">${e.title || ""}</div>
             <div class="event-msg">${msg}</div>
           </div>
-          <button class="btn btn-primary event-party-btn" data-idx="${idx}">🎉 Festa!</button>
+          <div class="event-actions">
+            <button class="btn btn-primary event-party-btn" data-idx="${idx}">🎉 Festa!</button>
+            <button class="btn event-loop-btn">♾️ Fabio Infinito</button>
+          </div>
         </div>`;
     })
     .join("");
 
   section.querySelectorAll(".event-party-btn").forEach((btn) => {
     btn.addEventListener("click", () => celebrate(active[Number(btn.dataset.idx)]));
+  });
+  section.querySelectorAll(".event-loop-btn").forEach((btn) => {
+    btn.addEventListener("click", fabioInfinite);
   });
 
   if (active.some((e) => e.party !== false)) confettiBurst();
@@ -473,6 +479,36 @@ function celebrate(ev) {
       }, mega ? 70 : 150)
     );
   }
+}
+
+// Dedicated full-screen "Fabio Infinito" mode: a never-ending, extra-colorful
+// psychedelic storm of Fabios. Stays until you tap "Voltar ao dashboard".
+function fabioInfinite() {
+  const existing = document.getElementById("fabio-loop");
+  if (existing) existing.remove();
+
+  const overlay = document.createElement("div");
+  overlay.id = "fabio-loop";
+  overlay.className = "fabio-loop-overlay";
+  overlay.innerHTML = `
+    <div class="fabio-storm" id="fabio-loop-storm" aria-hidden="true"></div>
+    <button class="btn btn-primary fabio-loop-back" id="fabio-loop-back">⬅️ Voltar ao dashboard</button>
+  `;
+  document.body.appendChild(overlay);
+
+  const stickers = (CONFIG.party && CONFIG.party.stickers) || [];
+  const stormBox = overlay.querySelector("#fabio-loop-storm");
+  let storm = null;
+  if (stickers.length) {
+    storm = setInterval(() => {
+      for (let i = 0; i < 3; i++) spawnSticker(stormBox, stickers, true);
+    }, 80);
+  }
+
+  overlay.querySelector("#fabio-loop-back").addEventListener("click", () => {
+    if (storm) clearInterval(storm);
+    overlay.remove();
+  });
 }
 
 // One Fabio sticker: pops in somewhere, spins, hue-shifts, then fades.

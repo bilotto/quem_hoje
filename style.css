@@ -644,6 +644,41 @@ body {
   to { filter: hue-rotate(360deg) drop-shadow(0 6px 12px rgba(0, 0, 0, 0.5)); }
 }
 
+/* "Fabio Infinito": dedicated endless psychedelic mode. */
+.fabio-loop-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 65;
+  overflow: hidden;
+  background: linear-gradient(135deg, #ff2d55, #ff9500, #ffd60a, #34c759, #00c7be, #007aff, #af52de, #ff2d55);
+  background-size: 400% 400%;
+  animation: loop-rainbow 6s ease infinite;
+}
+@keyframes loop-rainbow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+.fabio-loop-back {
+  position: absolute;
+  left: 50%;
+  bottom: 26px;
+  transform: translateX(-50%);
+  z-index: 3;
+}
+.event-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+}
+.event-loop-btn {
+  background: linear-gradient(135deg, #ff9500, #af52de);
+  color: #fff;
+  border-color: transparent;
+  white-space: nowrap;
+}
+
 /* Mega party: bigger, brighter, shakier */
 .party-overlay.mega {
   background: radial-gradient(circle at 50% 40%, rgba(255, 110, 199, 0.6), rgba(15, 10, 30, 0.94));
