@@ -16,6 +16,8 @@ const MIN_SPAWN_MS = 180;
 const SPAWN_DECAY = 26; // ms shaved off the spawn interval per second played
 const MIN_LIFETIME_MS = 1000;
 const LIFETIME_DECAY = 70; // ms shaved off each food's lifetime per second
+// Never spawn an item within this extra distance of Fabio (beyond his radius).
+const SPAWN_SAFE_MARGIN = 70;
 // Grace period at the start: only foods, no eggplant yet.
 const TRAP_GRACE_SEC = 4;
 // Phase 1: the eggplant becomes more and more common to bait a mistake.
@@ -101,11 +103,24 @@ function pick(list) {
   return list[Math.floor(Math.random() * list.length)];
 }
 
+// Pick a spot that is not right on top of Fabio, so nothing spawns already
+// inside his grab range (which felt unfair, especially with the eggplant).
+function pickSpawnPos(rect) {
+  const pad = 40;
+  const minDist = player.offsetWidth / 2 + SPAWN_SAFE_MARGIN;
+  let x = pad + Math.random() * (rect.width - pad * 2);
+  let y = pad + Math.random() * (rect.height - pad * 2);
+  for (let i = 0; i < 12; i++) {
+    if (Math.hypot(x - px, y - py) >= minDist) break;
+    x = pad + Math.random() * (rect.width - pad * 2);
+    y = pad + Math.random() * (rect.height - pad * 2);
+  }
+  return { x, y };
+}
+
 function spawnFood() {
   const rect = areaRect();
-  const pad = 40;
-  const x = pad + Math.random() * (rect.width - pad * 2);
-  const y = pad + Math.random() * (rect.height - pad * 2);
+  const { x, y } = pickSpawnPos(rect);
 
   const isTrap = Math.random() < trapChance();
 
