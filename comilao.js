@@ -16,8 +16,12 @@ const MIN_SPAWN_MS = 180;
 const SPAWN_DECAY = 26; // ms shaved off the spawn interval per second played
 const MIN_LIFETIME_MS = 1000;
 const LIFETIME_DECAY = 70; // ms shaved off each food's lifetime per second
-// Never spawn an item within this extra distance of Fabio (beyond his radius).
-const SPAWN_SAFE_MARGIN = 70;
+// Eating precision: Fabio grabs an item only when its center is within this
+// radius of his center. Items are kept at least GRAB_RADIUS*2 apart, so he can
+// never be inside two items' radius at once (no accidental eggplant grabs).
+const GRAB_RADIUS = 44;
+const MIN_ITEM_GAP = GRAB_RADIUS * 2 + 8;
+const SPAWN_FROM_PLAYER = GRAB_RADIUS + 46; // don't spawn on top of Fabio
 // Grace period at the start: only foods, no eggplant yet.
 const TRAP_GRACE_SEC = 4;
 // Phase 1: the eggplant becomes more and more common to bait a mistake.
@@ -103,24 +107,33 @@ function pick(list) {
   return list[Math.floor(Math.random() * list.length)];
 }
 
-// Pick a spot that is not right on top of Fabio, so nothing spawns already
-// inside his grab range (which felt unfair, especially with the eggplant).
+// Pick a spot that is (a) not on top of Fabio and (b) not too close to any
+// existing item. Keeping items MIN_ITEM_GAP apart means Fabio can only ever
+// be within grab range of one item, so he never eats the eggplant by mistake
+// just because it spawned next to the food he was aiming for.
+function farEnoughFromItems(x, y) {
+  for (let i = 0; i < foods.length; i++) {
+    if (Math.hypot(x - foods[i].x, y - foods[i].y) < MIN_ITEM_GAP) return false;
+  }
+  return true;
+}
+
 function pickSpawnPos(rect) {
   const pad = 40;
-  const minDist = player.offsetWidth / 2 + SPAWN_SAFE_MARGIN;
-  let x = pad + Math.random() * (rect.width - pad * 2);
-  let y = pad + Math.random() * (rect.height - pad * 2);
-  for (let i = 0; i < 12; i++) {
-    if (Math.hypot(x - px, y - py) >= minDist) break;
-    x = pad + Math.random() * (rect.width - pad * 2);
-    y = pad + Math.random() * (rect.height - pad * 2);
+  for (let i = 0; i < 24; i++) {
+    const x = pad + Math.random() * (rect.width - pad * 2);
+    const y = pad + Math.random() * (rect.height - pad * 2);
+    const awayFromPlayer = Math.hypot(x - px, y - py) >= SPAWN_FROM_PLAYER;
+    if (awayFromPlayer && farEnoughFromItems(x, y)) return { x, y };
   }
-  return { x, y };
+  return null; // no free spot right now: skip this spawn instead of overlapping
 }
 
 function spawnFood() {
   const rect = areaRect();
-  const { x, y } = pickSpawnPos(rect);
+  const pos = pickSpawnPos(rect);
+  if (!pos) return;
+  const { x, y } = pos;
 
   const isTrap = Math.random() < trapChance();
 
@@ -164,7 +177,7 @@ function eat(food, index) {
 function loop() {
   if (!playing) return;
   const now = performance.now();
-  const threshold = player.offsetWidth / 2 + 22;
+  const threshold = GRAB_RADIUS;
 
   for (let i = foods.length - 1; i >= 0; i--) {
     const food = foods[i];
