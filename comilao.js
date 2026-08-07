@@ -2,8 +2,6 @@
 
 const GAME = CONFIG.game || {};
 const FOODS = GAME.foods || ["🍖", "🍗", "🥩"];
-const MAN_TRAPS = GAME.manTraps || ["🍆", "👨"]; // reserved for phase 2
-const WOMAN_TRAPS = GAME.womanTraps || ["👩"]; // reserved for phase 2
 const PINTO = GAME.trap || "🍆";
 const DURATION = GAME.durationSec || 30;
 const SPAWN_MS = GAME.spawnMs || 650;
@@ -12,16 +10,18 @@ const FOOD_LIFETIME_MS = 2600;
 const RECORD_KEY = "comilao_recorde";
 
 // Difficulty ramp: the longer you play, the faster and trickier it gets.
-const MIN_SPAWN_MS = 230;
-const SPAWN_DECAY = 14; // ms shaved off the spawn interval per second played
-const MIN_LIFETIME_MS = 1100;
-const LIFETIME_DECAY = 45; // ms shaved off each food's lifetime per second
+// Tuned so the chaos kicks in early (~mid game) and lasts, instead of only
+// spiking in the last couple of seconds.
+const MIN_SPAWN_MS = 180;
+const SPAWN_DECAY = 26; // ms shaved off the spawn interval per second played
+const MIN_LIFETIME_MS = 1000;
+const LIFETIME_DECAY = 70; // ms shaved off each food's lifetime per second
 // Grace period at the start: only foods, no eggplant yet.
-const TRAP_GRACE_SEC = 6;
+const TRAP_GRACE_SEC = 4;
 // Phase 1: the eggplant becomes more and more common to bait a mistake.
-const BASE_TRAP_CHANCE = 0.12;
-const TRAP_GROWTH = 0.01;
-const MAX_TRAP_CHANCE = 0.45;
+const BASE_TRAP_CHANCE = 0.14;
+const TRAP_GROWTH = 0.022;
+const MAX_TRAP_CHANCE = 0.5;
 
 let area, player, hudScore, hudTime, hudRecord, startBtn, hint;
 let score = 0;
@@ -121,7 +121,7 @@ function spawnFood() {
     x,
     y,
     kind: isTrap ? "man" : "food",
-    pinto: true,
+    pinto: isTrap,
     dieAt: performance.now() + currentLifetimeMs(),
   });
 }
@@ -138,7 +138,7 @@ function eat(food, index) {
   foods.splice(index, 1);
   score += 1;
   renderHud();
-  chomp();
+  Sound.chomp();
   player.classList.remove("chomping");
   void player.offsetWidth; // restart animation
   player.classList.add("chomping");
@@ -184,6 +184,7 @@ function clearFoods() {
 
 function start() {
   if (playing) return;
+  Sound.unlock(); // called from the click handler, so the gesture unlocks audio
   playing = true;
   score = 0;
   timeLeft = DURATION;
@@ -192,6 +193,7 @@ function start() {
 
   hint.style.display = "none";
   startBtn.style.display = "none";
+  player.style.display = "";
 
   const rect = areaRect();
   px = rect.width / 2;
@@ -297,12 +299,13 @@ function manGameOver(isPinto) {
       ];
   runCrash({
     lines,
-    endTitle: isPinto ? "O FABIO NÃO PEGA NO PINTO" : "O FABIO NÃO PEGA EM HOMEM",
+    endTitle: isPinto ? "O FABIO NÃO PEGA A 🍆" : "O FABIO NÃO PEGA EM HOMEM",
     endSub: "Você perdeu. Isso ele JAMAIS comeria. 🚫",
   });
 }
 
-// Eating a woman trap: an absurd, reality-ending catastrophe.
+// Phase 2 (scaffolding, not spawned yet): eating a woman trap triggers an
+// absurd, reality-ending catastrophe. Kept here so phase 2 is a config flip.
 function womanGameOver() {
   runCrash({
     lines: [
@@ -380,29 +383,48 @@ function crashApocalypse(overlay, title, sub, mega) {
   }, 1000);
 }
 
-// Short "chomp" blip via WebAudio (best-effort).
-function chomp() {
-  try {
-    const AudioCtx = window.AudioContext || window.webkitAudioContext;
-    if (!AudioCtx) return;
-    if (!chomp._ctx) chomp._ctx = new AudioCtx();
-    const audio = chomp._ctx;
-    const osc = audio.createOscillator();
-    const gain = audio.createGain();
+// Tiny WebAudio engine for the "chomp" blip. Mobile browsers start the
+// AudioContext suspended, so we create/resume it on a user gesture (the
+// Start button). That fixes the "sometimes no sound" issue; scheduling one
+// self-contained oscillator per bite fixes the "sometimes double" glitching.
+const Sound = {
+  ctx: null,
+  unlock() {
+    try {
+      const AudioCtx = window.AudioContext || window.webkitAudioContext;
+      if (!AudioCtx) return;
+      if (!this.ctx) this.ctx = new AudioCtx();
+      if (this.ctx.state === "suspended") this.ctx.resume();
+    } catch (e) {
+      this.ctx = null;
+    }
+  },
+  _nextAt: 0,
+  chomp() {
+    const ctx = this.ctx;
+    if (!ctx || ctx.state !== "running") return;
+    // Space out simultaneous bites so identical-time square waves don't
+    // phase-cancel (which made it sound like 0 or 2 blips at random).
+    const t = Math.max(ctx.currentTime, this._nextAt);
+    this._nextAt = t + 0.06;
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
     osc.type = "square";
-    const t = audio.currentTime;
-    osc.frequency.setValueAtTime(420, t);
-    osc.frequency.exponentialRampToValueAtTime(160, t + 0.12);
+    const base = 360 + Math.random() * 120; // slight pitch variation per bite
+    osc.frequency.setValueAtTime(base, t);
+    osc.frequency.exponentialRampToValueAtTime(150, t + 0.1);
     gain.gain.setValueAtTime(0.0001, t);
-    gain.gain.exponentialRampToValueAtTime(0.25, t + 0.02);
-    gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.15);
-    osc.connect(gain).connect(audio.destination);
+    gain.gain.exponentialRampToValueAtTime(0.22, t + 0.015);
+    gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.13);
+    osc.connect(gain).connect(ctx.destination);
     osc.start(t);
-    osc.stop(t + 0.16);
-  } catch (e) {
-    /* ignore */
-  }
-}
+    osc.stop(t + 0.14);
+    osc.onended = () => {
+      osc.disconnect();
+      gain.disconnect();
+    };
+  },
+};
 
 function init() {
   area = document.getElementById("game-area");
@@ -413,7 +435,10 @@ function init() {
   startBtn = document.getElementById("start");
   hint = document.getElementById("game-hint");
 
+  if (!area || !player || !startBtn) return;
+
   player.src = GAME.sticker || "assets/fabio-sticker.png";
+  player.style.display = "none"; // only show Fabio once the game starts
   renderHud();
 
   startBtn.addEventListener("click", start);
