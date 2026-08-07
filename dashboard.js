@@ -442,35 +442,36 @@ function celebrate(ev) {
   };
   overlay.querySelector("#event-party-close").addEventListener("click", stop);
 
+  // Confetti is heavy, so it still runs for a limited number of bursts.
+  // (Only its own timer is cleared - not the endless storm/rain below.)
   const perBurst = mega ? 60 : 30;
   const maxBursts = mega ? 20 : 8;
   const burstEvery = mega ? 300 : 420;
   let bursts = 0;
-  timers.push(
-    setInterval(() => {
-      confettiBurst(perBurst);
-      if (++bursts >= maxBursts) timers.forEach(clearInterval);
-    }, burstEvery)
-  );
+  const confTimer = setInterval(() => {
+    confettiBurst(perBurst);
+    if (++bursts >= maxBursts) clearInterval(confTimer);
+  }, burstEvery);
+  timers.push(confTimer);
 
+  // Emoji rain: loops forever until the party is closed.
   const rainBox = overlay.querySelector("#event-party-emoji");
   const emojis = mega
     ? ["🎉", "🎊", "🥳", "❤️", "✨", "🎆", "💕", "🚗", "🧳", "🍾", "🏖️", "🔥"]
     : ["🎉", "🎊", "🥳", "❤️", "✨", "🎆", "💕"];
-  const rain = setInterval(() => spawnPartyEmoji(rainBox, emojis), mega ? 90 : 160);
-  timers.push(rain);
-  setTimeout(() => clearInterval(rain), mega ? 9000 : 6500);
+  timers.push(setInterval(() => spawnPartyEmoji(rainBox, emojis), mega ? 90 : 160));
 
-  // Psychedelic Fabio storm.
+  // Psychedelic Fabio storm: infinite loop of stickers until the party is
+  // closed. It never stops on its own anymore.
   const stickers = (CONFIG.party && CONFIG.party.stickers) || [];
   if (stickers.length) {
     const stormBox = overlay.querySelector("#fabio-storm");
     const perTick = mega ? 4 : 2;
-    const storm = setInterval(() => {
-      for (let i = 0; i < perTick; i++) spawnSticker(stormBox, stickers, mega);
-    }, mega ? 70 : 150);
-    timers.push(storm);
-    setTimeout(() => clearInterval(storm), mega ? 9000 : 6500);
+    timers.push(
+      setInterval(() => {
+        for (let i = 0; i < perTick; i++) spawnSticker(stormBox, stickers, mega);
+      }, mega ? 70 : 150)
+    );
   }
 }
 
